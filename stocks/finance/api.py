@@ -4,12 +4,15 @@ import csv
 import StringIO
 import time
 import re
+from datetime import date
+from dateutil.relativedelta import relativedelta
 from bs4 import BeautifulSoup
 
 class FinanceApi(object):
 	
 	def __init__(self):
 		self.scrape_url = "http://finance.yahoo.com/q/ks?s={symbol}"
+		self.historical_url = "http://ichart.yahoo.com/table.csv?s={symbol}&a={from_month}&b={from_date}&c={from_year}&d={to_month}&e={to_date}&f={to_year}&g=d&ignore=.csv"
 		self.nasdaqlisted_url = "ftp://ftp.nasdaqtrader.com/SymbolDirectory/nasdaqlisted.txt"
 		self.otherlisted_url = "ftp://ftp.nasdaqtrader.com/SymbolDirectory/otherlisted.txt"
 			
@@ -51,11 +54,51 @@ class FinanceApi(object):
 			print elem.parent
 			print elem.parent.next_sibling
 			
-
-
+		self.get_historical_information(symbol)
+		
+	def get_historical_information(self, symbol):
+		one_week = date.today() - relativedelta(weeks=1)
+		one_month = date.today() - relativedelta(months=1)
+		three_month = date.today() - relativedelta(months=3)
+		
+		one_week_csv = requests.get(self.build_historical_url(symbol, one_week, date.today())).content
+		one_month_csv = requests.get(self.build_historical_url(symbol, one_month, date.today())).content
+		three_month_csv = requests.get(self.build_historical_url(symbol, three_month, date.today())).content
+		
+		def parse_csv(csv_file):
+			f = StringIO.StringIO(csv_file)
+			reader = csv.reader(f, delimiter=',')
+			rows = []
+			for row in reader:
+				rows.append(row)	
+			
+			todays_price = rows[1]
+			earliest_price = rows[-1]
+			
+			return float(todays_price[4]) - float(earliest_price[1])
+			 
+		print "1 WEEK:\n"+str(parse_csv(one_week_csv))
+		print "1 MONTH:\n"+str(parse_csv(one_month_csv))
+		print "3 MONTH:\n"+str(parse_csv(three_month_csv))
+	
+	def build_historical_url(self, symbol, from_date, to_date):
+		url = self.historical_url.format(
+			symbol=symbol,
+			from_date=from_date.day,
+			from_month = from_date.month-1,
+			from_year = from_date.year,
+			to_date = to_date.day,
+			to_month = to_date.month-1,
+			to_year = to_date.year,
+		)
+		return url
+	
 if __name__ == "__main__":
 	api = FinanceApi()
 	api.get_stock_information("AAPL")
+	api.get_stock_information("MSFT")
+	#print api.get_symbols()
+	#api.get_historical_information("MSFT")
 	# symbols = get_symbols()
 	
 	# start_time = time.time()
