@@ -1,0 +1,19 @@
+1. Install Python 2.7 and its associated libraries. 
+	On Linux, this is usually the -dev or -devel package
+
+2. Check to see if you have pip by running 'pip' in your console
+	If you dont have it, install pip. On linux, this is usually the python-pip package.
+
+3. Run 'pip install virtualenv'
+
+4. In this directory, run 'virtualenv venv'
+
+5. Source the virtual environment
+ 	Linux: 'source venv/bin/activate
+	Windows: '.\venv\Scripts\activate.bat'
+
+6. Run 'pip install -r requirements.txt'
+
+7. Run 'cd flask' and 'python app.py'
+
+8. The site should now be running at localhost:5000
