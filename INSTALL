@@ -14,6 +14,8 @@
 
 6. Run 'pip install -r requirements.txt'
 
-7. Run 'cd flask' and 'python app.py'
+7. Run 'python manage.py create_db'
 
-8. The site should now be running at localhost:5000
+8. Run 'python runserver.py'
+
+9. The site should now be running at localhost:5000
