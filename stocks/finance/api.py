@@ -58,6 +58,8 @@ class FinanceApi(object):
 			
 		self.get_historical_information(stock, stock_report)
 		
+		return stock_report
+		
 	def get_historical_information(self, stock, stock_report):
 		one_week = date.today() - relativedelta(weeks=1)
 		one_month = date.today() - relativedelta(months=1)
