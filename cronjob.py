@@ -20,5 +20,5 @@ if __name__ == "__main__":
 		stock_report = api.get_stock_information(stock)
 		db.session.add(stock_report)
 	
-	db.session.ccommit()
+	db.session.commit()
 
