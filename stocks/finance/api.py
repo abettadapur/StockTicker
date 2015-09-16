@@ -51,10 +51,17 @@ class FinanceApi(object):
 		soup = BeautifulSoup(html, 'lxml')
 		
 		for elem in soup(text="Float:"):
-			stock_report.stock_float = self.convert_price_string(elem.parent.next_sibling.string)
+                        print elem.parent.next_sibling
+                        try:
+                                stock_report.stock_float = self.convert_price_string(elem.parent.next_sibling.string)
+                        except ValueError:
+                                stock_report.stock_float = -1;
 			
 		for elem in soup(text="Qtrly Revenue Growth (yoy):"):
-			stock_report.quarterly_growth = float(elem.parent.next_sibling.string[:-1])
+                        try:
+                                stock_report.quarterly_growth = float(elem.parent.next_sibling.string[:-1])
+                        except ValueError:
+                                stock_report.quarterly_growth = -1
 			
 		self.get_historical_information(stock, stock_report)
 		
@@ -64,10 +71,9 @@ class FinanceApi(object):
 		one_week = date.today() - relativedelta(weeks=1)
 		one_month = date.today() - relativedelta(months=1)
 		three_month = date.today() - relativedelta(months=3)
-		
-		one_week_csv = requests.get(self.build_historical_url(stock.symbol, one_week, date.today())).content
-		one_month_csv = requests.get(self.build_historical_url(stock.symbol, one_month, date.today())).content
-		three_month_csv = requests.get(self.build_historical_url(stock.symbol, three_month, date.today())).content
+		one_week_csv = requests.get(self.build_historical_url(stock.symbol, one_week, date.today()))
+		one_month_csv = requests.get(self.build_historical_url(stock.symbol, one_month, date.today()))
+		three_month_csv = requests.get(self.build_historical_url(stock.symbol, three_month, date.today()))
 		
 		def parse_csv(csv_file):
 			f = StringIO.StringIO(csv_file)
@@ -78,12 +84,24 @@ class FinanceApi(object):
 			
 			todays_price = rows[1]
 			earliest_price = rows[-1]
-			
-			return float(todays_price[4]) - float(earliest_price[1])
-			 
-		stock_report.one_week = float(parse_csv(one_week_csv))
-		stock_report.one_month = float(parse_csv(one_month_csv))
-		stock_report.three_month = float(parse_csv(three_month_csv))
+
+			try:
+                                return float(todays_price[4]) - float(earliest_price[1])
+                        except ValueError:
+                                return -1
+        
+                if(one_week_csv.status_code==200):
+                        stock_report.one_week = float(parse_csv(one_week_csv.content))
+                else:
+                        stock_report.one_week = -1;
+                if(one_month_csv.status_code==200):
+                        stock_report.one_month = float(parse_csv(one_month_csv.content))
+                else:
+                        stock_report.one_month = -1;
+                if(three_month_csv.status_code==200):
+                        stock_report.three_month = float(parse_csv(three_month_csv.content))
+                else:
+                        stock_report.three_month = -1;
 	
 	def build_historical_url(self, symbol, from_date, to_date):
 		url = self.historical_url.format(
@@ -100,12 +118,17 @@ class FinanceApi(object):
 	def convert_price_string(self, price):
 		lookup = {'K': 1000, 'M': 1000000, 'B': 1000000000}
 		unit = price[-1]
-		number = int(val[:-1])
-		
-		if unit in lookup:
-			return lookup[unit] * number
-		
-		return int(price)
+                try:
+                        number = float(price[:-1])
+                        
+                        if unit in lookup:
+                                return lookup[unit] * number
+                        
+                        return int(price)
+                
+                except ValueError:
+                        return -1
+                        
 	
 if __name__ == "__main__":
 	api = FinanceApi()

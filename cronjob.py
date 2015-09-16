@@ -17,8 +17,11 @@ if __name__ == "__main__":
 	
 	stocks = db.session.query(Stock).all()
 	for stock in stocks:
+                print "Processing %s" % stock.symbol
 		stock_report = api.get_stock_information(stock)
 		db.session.add(stock_report)
+		db.session.commit()
+                
 	
-	db.session.commit()
+	
 
