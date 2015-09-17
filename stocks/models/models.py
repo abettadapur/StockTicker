@@ -1,8 +1,10 @@
 from stocks import db
+import datetime, time
 
 class Stock(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	symbol = db.Column(db.String(10), unique=True)
+	reports = db.relationship("StockReport", backref="stock")
 	
 	def __init__(self, symbol):
 		self.symbol = symbol
@@ -32,7 +34,10 @@ class StockReport(db.Model):
 		return '<StockReport %r>' % self.symbol
 		
 	def as_dict(self):
-		return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+		dict_repr = {c.name: getattr(self, c.name) for c in self.__table__.columns}
+		dict_repr['timestamp'] = time.mktime(dict_repr['timestamp'].timetuple())
+		dict_repr['stock'] = self.stock.as_dict()
+		return dict_repr
 
 	
 

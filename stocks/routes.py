@@ -7,6 +7,7 @@ from flask_restful import Api
 api = Api(app)
 api.add_resource(stock_api.HelloWorld, '/api')
 api.add_resource(stock_api.ListStockResource, '/api/stocks')
+api.add_resource(stock_api.StockReportResource, '/api/stocks/<string:symbol>/report')
 
 @app.route('/')
 def index():
