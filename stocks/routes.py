@@ -8,6 +8,7 @@ api = Api(app)
 api.add_resource(stock_api.HelloWorld, '/api')
 api.add_resource(stock_api.ListStockResource, '/api/stocks')
 api.add_resource(stock_api.StockReportResource, '/api/stocks/<string:symbol>/report')
+api.add_resource(stock_api.FilteredStockReportResource, '/api/stocks/filtered_reports')
 
 @app.route('/')
 def index():
