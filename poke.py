@@ -1,3 +1,6 @@
-from stocks import mail
+from stocks.finance.api import FinanceApi
+from stocks.models.models import Stock
 
-mail.send_mail(None)
+api = FinanceApi()
+report  =  api.get_stock_information(Stock("AAPL"))
+print report.one_month

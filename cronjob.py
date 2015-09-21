@@ -28,18 +28,24 @@ if __name__ == "__main__":
 	
 	stocks = db.session.query(Stock).all()
 	
-	threads = []
-	for i in range(0, len(stocks), len(stocks)/8):
-		subset = stocks[i:i+len(stocks)/8]
-		threads.append(threading.Thread(target=process_stocks, args=(subset,)))
+	for stock in stocks:
+		print "Processing %s" % stock.symbol
+		stock_report = api.get_stock_information(stock)
+		db.session.add(stock_report)
+		db.session.commit()
+	
+	# threads = []
+	# for i in range(0, len(stocks), len(stocks)/8):
+	# 	subset = stocks[i:i+len(stocks)/8]
+	# 	threads.append(threading.Thread(target=process_stocks, args=(subset,)))
 
-	for thread in threads:
-		thread.daemon = True
-		thread.start()
+	# for thread in threads:
+	# 	thread.daemon = True
+	# 	thread.start()
 		
-	while threading.active_count() > 0:
-		print threading.active_count()
-		time.sleep(5)
+	# while threading.active_count() > 0:
+	# 	print threading.active_count()
+	# 	time.sleep(5)
 		
 		
 	
