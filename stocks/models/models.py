@@ -31,12 +31,33 @@ class StockReport(db.Model):
 		self.timestamp = timestamp
 		
 	def __repr__(self):
-		return '<StockReport %r>' % self.symbol
+		return '<StockReport %r>' % self.id
 		
 	def as_dict(self):
 		dict_repr = {c.name: getattr(self, c.name) for c in self.__table__.columns}
 		dict_repr['timestamp'] = time.mktime(dict_repr['timestamp'].timetuple())
 		dict_repr['stock'] = self.stock.as_dict()
+		return dict_repr
+		
+class Setting(db.Model):
+	id = db.Column(db.Integer, primary_key=True)
+	display_name = db.Column(db.String(100))
+	key = db.Column(db.String(30), unique=True)
+	value = db.Column(db.String(100), unique=True)
+	type = db.Column(db.String(10))
+	
+	
+	def __init__(self, name, key, value):
+		self.display_name = name
+		self.key = key
+		self.value = value
+		self.type = type(value).__name__
+		
+	def __repr__(self):
+		return '<Setting %r>' % self.key
+		
+	def as_dict(self):
+		dict_repr = {c.name: getattr(self, c.name) for c in self.__table__.columns}
 		return dict_repr
 
 	

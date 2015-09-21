@@ -8,6 +8,7 @@ from datetime import date
 from dateutil.relativedelta import relativedelta
 from bs4 import BeautifulSoup
 from stocks.models.models import Stock, StockReport
+from yahoo_finance import Share
 
 class FinanceApi(object):
 	
@@ -45,7 +46,6 @@ class FinanceApi(object):
 		
 	def get_stock_information(self, stock):
 		
-		
 		stock_report = StockReport(stock, date.today())
 		html = requests.get(self.scrape_url.format(symbol=stock.symbol)).content
 		soup = BeautifulSoup(html, 'lxml')
@@ -55,15 +55,17 @@ class FinanceApi(object):
                         try:
                                 stock_report.stock_float = self.convert_price_string(elem.parent.next_sibling.string)
                         except ValueError:
-                                stock_report.stock_float = -1;
+                                stock_report.stock_float = None
 			
 		for elem in soup(text="Qtrly Revenue Growth (yoy):"):
                         try:
                                 stock_report.quarterly_growth = float(elem.parent.next_sibling.string[:-1])
                         except ValueError:
-                                stock_report.quarterly_growth = -1
+                                stock_report.quarterly_growth = None
 			
 		self.get_historical_information(stock, stock_report)
+		
+		stock_report.closing_price = Share(stock.symbol).get_price()
 		
 		return stock_report
 		
@@ -86,22 +88,22 @@ class FinanceApi(object):
 			earliest_price = rows[-1]
 
 			try:
-                                return float(todays_price[4]) - float(earliest_price[1])
-                        except ValueError:
-                                return -1
-        
-                if(one_week_csv.status_code==200):
-                        stock_report.one_week = float(parse_csv(one_week_csv.content))
-                else:
-                        stock_report.one_week = -1;
-                if(one_month_csv.status_code==200):
-                        stock_report.one_month = float(parse_csv(one_month_csv.content))
-                else:
-                        stock_report.one_month = -1;
-                if(three_month_csv.status_code==200):
-                        stock_report.three_month = float(parse_csv(three_month_csv.content))
-                else:
-                        stock_report.three_month = -1;
+				return (float(todays_price[4]) - float(earliest_price[1]))/float(earliest_price[1])
+			except ValueError:
+				return None
+		
+		if(one_week_csv.status_code==200):
+				stock_report.one_week = float(parse_csv(one_week_csv.content))
+		else:
+				stock_report.one_week = None;
+		if(one_month_csv.status_code==200):
+				stock_report.one_month = float(parse_csv(one_month_csv.content))
+		else:
+				stock_report.one_month = None;
+		if(three_month_csv.status_code==200):
+				stock_report.three_month = float(parse_csv(three_month_csv.content))
+		else:
+				stock_report.three_month = None;
 	
 	def build_historical_url(self, symbol, from_date, to_date):
 		url = self.historical_url.format(

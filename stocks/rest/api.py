@@ -1,5 +1,6 @@
-from flask_restful import Resource, reqparse
-from stocks.models.models import Stock, StockReport
+from flask_restful import Resource, reqparse, abort
+from stocks.models.models import Stock, StockReport, Setting
+import datetime
 
 class HelloWorld(Resource):
 	def get(self):
@@ -38,10 +39,37 @@ class FilteredStockReportResource(Resource):
 		onem_growth = args['onem_growth'] if args['onem_growth'] is not None else 15.0
 		threem_growth = args['threem_growth'] if args['threem_growth'] is not None else 25.0
 		
-		print('float' in args)
-		print(stock_float)
-		
-		filtered_stocks = StockReport.query.filter(StockReport.stock_float is not None).filter(StockReport.stock_float<stock_float).filter(StockReport.quarterly_growth > yoy_growth).filter(StockReport.one_week > onew_growth).filter(StockReport.one_month > onem_growth).filter(StockReport.three_month > threem_growth)
+		filtered_stocks = StockReport.query.filter(StockReport.stock_float is not None).filter(StockReport.stock_float<stock_float).filter(StockReport.quarterly_growth > yoy_growth).filter(StockReport.one_week > onew_growth).filter(StockReport.one_month > onem_growth).filter(StockReport.three_month > threem_growth).filter(StockReport.timestamp>datetime.datetime.utcnow()-datetime.timedelta(days=2))
+		print [c.as_dict() for c in filtered_stocks]
 		return [c.as_dict() for c in filtered_stocks]
 		
+		
+class SettingsResource(Resource):
 	
+	def __init__(self):
+		self.reqparse = reqparse.RequestParser()
+		self.reqparse.add_argument('key', type=str, required=False, location='args', help='No token to verify')
+		
+		self.create_reqparse = reqparse.RequestParser()
+		self.reqparse.add_argument('name', type=str, required=True, location='json', help='Need a display name for the setting')
+		self.reqparse.add_argument('key', type=str, required=True, location='json', help='Need a display name for the setting')
+		self.reqparse.add_argument('value', type=str, required=True, location='json', help='Need a display name for the setting')
+		super(SettingsResource, self).__init__()
+		
+	def get(self):
+		args = self.reqparse.parse_args()
+		key = args['key']
+		
+		if key is not None:
+			settings = Setting.query.filter(Setting.key == key)
+			if len(settings) == 0:
+				abort(404, message='{"error": "No setting with this key was found"}')
+			else:
+				return [c.as_dict() for c in settings]
+		
+		else:
+			return [c.as_dict() for c in Setting.query.all()]
+			
+	def post(self):
+		pass
+		
