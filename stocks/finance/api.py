@@ -65,7 +65,10 @@ class FinanceApi(object):
 			
 		self.get_historical_information(stock, stock_report)
 		
-		stock_report.closing_price = Share(stock.symbol).get_price()
+		try:
+			stock_report.closing_price = Share(stock.symbol).get_price()
+		except:
+			stock_report.closing_price = None
 		
 		return stock_report
 		
