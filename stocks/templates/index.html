@@ -1,17 +1,67 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="myApp">
+<html lang="en" ng-app="StockTrackerApp">
   <head>
     <meta charset="utf-8">
-      <script src="/static/js/angular.min.js"></script>
-      <script type="javascript" src="/static/js/controllers.js"></script>
+      <script src="/static/js/angular.js"></script>
+      <script type="text/javascript" src="/static/js/app.js"></script>
+      <script type="text/javascript" src="/static/js/controllers.js"></script>
       <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
       <link rel="stylesheet" type="text/css" href="/static/css/style.css">
     <title>StockTracker</title>
   </head>
   <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="#">StockTracker</a>
+            </div>
+            <div id="navbar" class="collapse navbar-collapse">
+              <ul class="nav navbar-nav">
+                <li class="active"><a href="">Home</a></li>
+                <li><a href="#graph">Graph</a></li>
+                <li><a href="#settings">Settings</a></li>
+              </ul>
+            </div>
+          </div>
+    </nav>
+    <div class="container home-page-style">
 
-{% block navigation %}{% endblock %}
-    {% block home %}{% endblock %}
+        <div class="row">
+              <div class="container col-lg-6" ng-controller="StockTrackerCtrl1">
+                  <div class="panel panel-default">
+                      <h2 class="text-center">Stock of the Week</h2>
+                        <div class="panel-body">
+                            Panel content
+                        </div>
+                  </div>
+            </div>
+            <div class="container col-lg-6">
+                  <div class="panel panel-default">
+                      <h2 class="text-center">Markets</h2>
+                        <div class="panel-body">
+                            Panel content
+                        </div>
+                  </div>
+            </div>
 
+        </div>
+        <div class="panel panel-default text-justify">
+            <h2 class="text-center">Run Custom Analysis</h2>
+            <div class="panel-body">
+                Panel content
+            </div>
+        </div>
+    </div>
+  <div class="container home-page-style">
+        <label>Name:</label>
+        <input type="text" data-ng-model="yourName" placeholder="Enter a name here">
+        <h1>Hello {{yourName|angular}}!</h1>
+    </div>
   </body>
 </html>
