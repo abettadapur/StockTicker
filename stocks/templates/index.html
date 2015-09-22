@@ -1,3 +1,17 @@
-<h1> Hello World</h1>
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+  <head>
+    <meta charset="utf-8">
+      <script src="/static/js/angular.min.js"></script>
+      <script type="javascript" src="/static/js/controllers.js"></script>
+      <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+      <link rel="stylesheet" type="text/css" href="/static/css/style.css">
+    <title>StockTracker</title>
+  </head>
+  <body>
 
-<h2>Place wrapper HTML code in flask/templates/index.html</h2>
+{% block navigation %}{% endblock %}
+    {% block home %}{% endblock %}
+
+  </body>
+</html>

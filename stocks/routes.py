@@ -10,6 +10,7 @@ api.add_resource(stock_api.ListStockResource, '/api/stocks')
 api.add_resource(stock_api.StockReportResource, '/api/stocks/<string:symbol>/report')
 api.add_resource(stock_api.FilteredStockReportResource, '/api/stocks/filtered_reports')
 
+
 @app.route('/')
 def index():
-	return render_template("index.html")
+    return render_template("index.html")
