@@ -1,4 +1,4 @@
-from stocks import db
+﻿from stocks import db
 from stocks.rest import api as stock_api
 from stocks import app
 from flask import render_template
@@ -9,6 +9,7 @@ api.add_resource(stock_api.HelloWorld, '/api')
 api.add_resource(stock_api.ListStockResource, '/api/stocks')
 api.add_resource(stock_api.StockReportResource, '/api/stocks/<string:symbol>/report')
 api.add_resource(stock_api.FilteredStockReportResource, '/api/stocks/filtered_reports')
+api.add_resource(stock_api.RealTimeStockResource, '/api/stocks/<string:symbol>/realtime')
 
 
 @app.route('/')

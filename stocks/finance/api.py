@@ -53,7 +53,7 @@ class FinanceApi(object):
 
     def get_detailed_stock_information(self, stock):
         share = Share(stock.symbol)
-        stock_detail = StockDetail(stock, datetime.datetime.utcnow())
+        stock_detail = StockDetail(stock, datetime.utcnow())
 
         stock_detail.price = share.get_price();
         stock_detail.change = share.get_change();

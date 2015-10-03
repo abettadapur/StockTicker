@@ -48,9 +48,10 @@ class FilteredStockReportResource(Resource):
 class RealTimeStockResource(Resource):
     
     def get(self, symbol):
-        stock = Stock.query.filter(Stock.symbol == symbol)
+        stock = Stock.query.filter(Stock.symbol == symbol).first()
         if stock:
-            stock_detail = StockDetail.query.join(Stock).filter(Stock.symbol==symbol).filter(StockDetail.timestamp>datetime.datetime.utcnow()-datetime.timedelta(minutes=5))
+            stock_detail = StockDetail.query.join(Stock).filter(Stock.symbol==symbol).filter(StockDetail.timestamp>datetime.datetime.utcnow()-datetime.timedelta(minutes=5)).first()
+            print stock_detail
             if not stock_detail:
                 finance_api = FinanceApi()
                 stock_detail = finance_api.get_detailed_stock_information(stock)
