@@ -1,5 +1,7 @@
+﻿from stocks import db
 from flask_restful import Resource, reqparse, abort
-from stocks.models.models import Stock, StockReport, Setting
+from stocks.models.models import Stock, StockReport, StockDetail, Setting
+from stocks.finance.api import FinanceApi
 import datetime
 
 class HelloWorld(Resource):
@@ -42,8 +44,23 @@ class FilteredStockReportResource(Resource):
 		filtered_stocks = StockReport.query.filter(StockReport.stock_float is not None).filter(StockReport.stock_float<stock_float).filter(StockReport.quarterly_growth > yoy_growth).filter(StockReport.one_week > onew_growth).filter(StockReport.one_month > onem_growth).filter(StockReport.three_month > threem_growth).filter(StockReport.timestamp>datetime.datetime.utcnow()-datetime.timedelta(days=2))
 		print [c.as_dict() for c in filtered_stocks]
 		return [c.as_dict() for c in filtered_stocks]
-		
-		
+
+class RealTimeStockResource(Resource):
+    
+    def get(self, symbol):
+        stock = Stock.query.filter(Stock.symbol == symbol)
+        if stock:
+            stock_detail = StockDetail.query.join(Stock).filter(Stock.symbol==symbol).filter(StockDetail.timestamp>datetime.datetime.utcnow()-datetime.timedelta(minutes=5))
+            if not stock_detail:
+                finance_api = FinanceApi()
+                stock_detail = finance_api.get_detailed_stock_information(stock)
+                db.session.add(stock_detail)
+                db.session.commit()
+            return stock_detail.as_dict()
+
+        else:
+            abort(404, message = '{"error": "%s was not found in the database"}' % symbol)
+
 class SettingsResource(Resource):
 	
 	def __init__(self):

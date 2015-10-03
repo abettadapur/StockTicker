@@ -1,4 +1,5 @@
-import threading
+﻿import threading
+import logging
 import time
 from stocks.models.models import Stock, StockReport
 from stocks.finance.api import FinanceApi
@@ -6,48 +7,62 @@ from stocks import db
 from stocks import mail
 
 
-def process_stocks(stocks):
+def process_stocks(thread_id, stocks):
     session = db.create_scoped_session()
+    logger = logging.getLogger("Thread %d"%thread_id)
+    total = len(stocks)
+    counter = 0
     for stock in stocks:
-        print "Processing %s" % stock.symbol
-        stock_report = api.get_stock_information(stock)
-        session.add(stock_report)
-        session.commit()
+        counter = counter + 1
+        try:
+            logger.info("%d stocks remain to be processed" % (total-counter))
+            logger.info("Processing %s" % stock.symbol)
+            stock_report = api.get_stock_information(stock)
+            session.add(stock_report)
+            session.commit()
+        except Exception as ex:
+            logger.error("Failed to process %s" % stock.symbol)
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO)
+    logger = logging.getLogger(__name__)
+    logging.getLogger("requests").setLevel(logging.WARNING)
     api = FinanceApi()
     stocks = api.get_symbols()
 
     # Add stocks to database
 
+    logger.info("Retrieving symbols and metadata")
     for stock in stocks:
         queried_stock = db.session.query(Stock).filter_by(symbol=stock.symbol).first()
         if not queried_stock:
             db.session.add(stock)
-
+            
     db.session.commit()
 
     stocks = db.session.query(Stock).all()
 
-    for stock in stocks:
-        print "Processing %s" % stock.symbol
-        stock_report = api.get_stock_information(stock)
-        db.session.add(stock_report)
-        db.session.commit()
+    #for stock in stocks:
+    #    logger.info("Processing %s" % stock.symbol)
+    #    stock_report = api.get_stock_information(stock)
+    #    db.session.add(stock_report)
+    #    db.session.commit()
 
-    # threads = []
-    # for i in range(0, len(stocks), len(stocks)/8):
-    # 	subset = stocks[i:i+len(stocks)/8]
-    # 	threads.append(threading.Thread(target=process_stocks, args=(subset,)))
+    threads = []
+    counter = 0
+    for i in range(0, len(stocks), len(stocks)/8):
+        counter = counter + 1
+        subset = stocks[i:i+len(stocks)/8]
+        threads.append(threading.Thread(target=process_stocks, args=(counter, subset)))
 
-    # for thread in threads:
-    # 	thread.daemon = True
-    # 	thread.start()
+    for thread in threads:
+        thread.daemon = True
+        thread.start()
 
-    # while threading.active_count() > 0:
-    # 	print threading.active_count()
-    # 	time.sleep(5)
+    while threading.active_count() > 0:
+        print threading.active_count()
+        time.sleep(5)
 
 
 

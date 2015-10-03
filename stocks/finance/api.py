@@ -4,10 +4,10 @@ import csv
 import StringIO
 import time
 import re
-from datetime import date
+from datetime import datetime, date, time
 from dateutil.relativedelta import relativedelta
 from bs4 import BeautifulSoup
-from stocks.models.models import Stock, StockReport
+from stocks.models.models import Stock, StockReport, StockDetail
 from yahoo_finance import Share
 
 
@@ -44,14 +44,37 @@ class FinanceApi(object):
 
         return symbols
 
-    def get_stock_information(self, stock):
+    def fill_stock_metadata(self, stock):
+        share = Share(stock.symbol)
+        stock.exchange = share.get_stock_exchange();
+        metadata = share.get_info()
+        stock.industry = metadata["Industry"] if "Industry" in metadata else ""
+        stock.sector = metadata["Sector"] if "Sector" in metadata else ""
 
+    def get_detailed_stock_information(self, stock):
+        share = Share(stock.symbol)
+        stock_detail = StockDetail(stock, datetime.datetime.utcnow())
+
+        stock_detail.price = share.get_price();
+        stock_detail.change = share.get_change();
+        stock_detail.volume = share.get_volume();
+        stock_detail.open = share.get_open();
+        stock_detail.days_high = share.get_days_high();
+        stock_detail.days_low = share.get_days_low();
+        stock_detail.year_high = share.get_year_high();
+        stock_detail.year_low = share.get_year_low();
+        stock_detail.fifty_avg = share.get_50day_moving_avg();
+        stock_detail.twohundred_avg = share.get_200day_moving_avg();
+
+        return stock_detail
+
+    def get_stock_information(self, stock):
+        
         stock_report = StockReport(stock, date.today())
         html = requests.get(self.scrape_url.format(symbol=stock.symbol)).content
         soup = BeautifulSoup(html, 'lxml')
 
         for elem in soup(text="Float:"):
-            print elem.parent.next_sibling
             try:
                 stock_report.stock_float = self.convert_price_string(elem.parent.next_sibling.string)
             except ValueError:
