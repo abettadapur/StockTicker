@@ -1,17 +1,7 @@
-'use strict';
-var stockApp = angular.module('StockTrackerApp', ['ngRoute']);
-
-stockApp.config(function ($routeProvider) {
-    $routeProvider.when('/', {
-        templateUrl: 'static/pages/home.html',
-        controller: 'homeController'
+function HomeController ($scope, StockReport) 
+{
+    var postsQuery = StockReport.GetReport({}, function (report) {
+        $scope.report = report;
     });
-});
+}
 
-stockApp.controller('homeController', function ($scope, $http) {
-    $http.get('/api/stocks/AAPL/report')
-        .success(function (response) {
-            $scope.particularStock =
-                response;
-        });
-});
