@@ -1,59 +1,16 @@
-﻿<div class="container home-page-style">
-
-    <div class="row">
-        <div class="container col-lg-6">
-            <div class="panel panel-default">
-                <h2 class="text-center">Stock of the Week</h2>
-                <div class="panel-body table-striped">
-                    <table ng-repeat="x in report" class="table">
-                        <th class="text-center">
-                            <h3>{{x.stock.symbol}}</h3>
-                        </th>
-                        <tbody>
-                            <tr>
-                                <th>Three Month</th>
-                                <td>{{x.three_month}}</td>
-                            </tr>
-                            <tr>
-                                <th>One Month</th>
-                                <td>{{x.one_month}}</td>
-                            </tr>
-                            <tr>
-                                <th>One Week</th>
-                                <td>{{x.one_week}}</td>
-                            </tr>
-                            <tr>
-                                <th>Quarterly Growth</th>
-                                <td>{{x.quarterly_growth}}</td>
-                            </tr>
-                            <tr>
-                                <th>Stock Float</th>
-                                <td>{{x.stock_float}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+﻿<div id="page-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">
+                    Dashboard <small>Statistics Overview</small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li class="active">
+                        <i class="fa fa-dashboard"></i> Dashboard
+                    </li>
+                </ol>
             </div>
         </div>
-        <div class="container col-lg-6">
-            <div class="panel panel-default">
-                <h2 class="text-center">Markets</h2>
-                <div class="panel-body">
-                    Panel content
-                </div>
-            </div>
-        </div>
-
     </div>
-    <div class="panel panel-default text-justify">
-        <h2 class="text-center">Run Custom Analysis</h2>
-        <div class="panel-body">
-            Panel content
-        </div>
-    </div>
-</div>
-<div class="container home-page-style">
-    <label>Name:</label>
-    <input type="text" data-ng-model="yourName" placeholder="Enter a name here">
-    <h1>Hello {{yourName}}!</h1>
 </div>
