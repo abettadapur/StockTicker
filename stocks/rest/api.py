@@ -51,7 +51,6 @@ class RealTimeStockResource(Resource):
         stock = Stock.query.filter(Stock.symbol == symbol).first()
         if stock:
             stock_detail = StockDetail.query.join(Stock).filter(Stock.symbol==symbol).filter(StockDetail.timestamp>datetime.datetime.utcnow()-datetime.timedelta(minutes=5)).first()
-            print stock_detail
             if not stock_detail:
                 finance_api = FinanceApi()
                 stock_detail = finance_api.get_detailed_stock_information(stock)
@@ -59,6 +58,28 @@ class RealTimeStockResource(Resource):
                 db.session.commit()
             return stock_detail.as_dict()
 
+        else:
+            abort(404, message = '{"error": "%s was not found in the database"}' % symbol)
+
+class HistoricalStockResource(Resource):
+
+    def __init__(self):
+        self.reqparse = reqparse.RequestParser()
+        self.reqparse.add_argument('from', type=str, required=True, location='args', help='A from date is required')
+        self.reqparse.add_argument('to', type=str, required=True, location='args', help='A to date is required')
+        super(HistoricalStockResource, self).__init__()
+
+    def get(self, symbol):
+        args = self.reqparse.parse_args()
+        
+        #Note(abettadapur): This is a format check. pass the strings into the function anyway
+        from_date = datetime.datetime.strptime(args['from'], "%Y-%m-%d")
+        to_date = datetime.datetime.strptime(args['to'], "%Y-%m-%d")
+
+        stock = Stock.query.filter(Stock.symbol == symbol).first()
+        if stock:
+            finance_api = FinanceApi()
+            return finance_api.get_historical_chart(stock, args['from'], args['to'])
         else:
             abort(404, message = '{"error": "%s was not found in the database"}' % symbol)
 

@@ -96,52 +96,36 @@ class FinanceApi(object):
         return stock_report
 
     def get_historical_information(self, stock, stock_report):
-        one_week = date.today() - relativedelta(weeks=1)
-        one_month = date.today() - relativedelta(months=1)
-        three_month = date.today() - relativedelta(months=3)
-        one_week_csv = requests.get(self.build_historical_url(stock.symbol, one_week, date.today()))
-        one_month_csv = requests.get(self.build_historical_url(stock.symbol, one_month, date.today()))
-        three_month_csv = requests.get(self.build_historical_url(stock.symbol, three_month, date.today()))
+        today = date.today().strftime("%Y-%m-%d")
+        one_week = (date.today() - relativedelta(weeks=1)).strftime("%Y-%m-%d")
+        one_month = (date.today() - relativedelta(months=1)).strftime("%Y-%m-%d")
+        three_month = (date.today() - relativedelta(months=3)).strftime("%Y-%m-%d")
 
-        def parse_csv(csv_file):
-            f = StringIO.StringIO(csv_file)
-            reader = csv.reader(f, delimiter=',')
-            rows = []
-            for row in reader:
-                rows.append(row)
+        share = Share(stock.symbol)
+        
+        one_week_history = share.get_historical(one_week, today)
+        one_month_history = share.get_historical(one_month, today)
+        three_month_history = share.get_historical(three_month, today)
 
-            todays_price = rows[1]
-            earliest_price = rows[-1]
-
-            try:
-                return (float(todays_price[4]) - float(earliest_price[1])) / float(earliest_price[1])
-            except ValueError:
-                return None
-
-        if (one_week_csv.status_code == 200):
-            stock_report.one_week = float(parse_csv(one_week_csv.content))
+        if len(one_week_history) > 0:
+            stock_report.one_week = (float(one_week_history[0]['Close']) - float(one_week_history[-1]['Open']))/float(one_week_history[-1]["Open"])
         else:
             stock_report.one_week = None;
-        if (one_month_csv.status_code == 200):
-            stock_report.one_month = float(parse_csv(one_month_csv.content))
+
+        if len(one_month_history) > 0:
+            stock_report.one_month = (float(one_month_history[0]['Close']) - float(one_month_history[-1]['Open']))/float(one_month_history[-1]["Open"])
         else:
             stock_report.one_month = None;
-        if (three_month_csv.status_code == 200):
-            stock_report.three_month = float(parse_csv(three_month_csv.content))
+
+        if len(three_month_history) > 0:
+            stock_report.three_month = (float(three_month_history[0]['Close']) - float(three_month_history[-1]['Open']))/float(three_month_history[-1]["Open"])
         else:
             stock_report.three_month = None;
 
-    def build_historical_url(self, symbol, from_date, to_date):
-        url = self.historical_url.format(
-            symbol=symbol,
-            from_date=from_date.day,
-            from_month=from_date.month - 1,
-            from_year=from_date.year,
-            to_date=to_date.day,
-            to_month=to_date.month - 1,
-            to_year=to_date.year,
-        )
-        return url
+    def get_historical_chart(self, stock, from_date, to_date):
+        share = Share(stock.symbol)
+        history = share.get_historical(from_date, to_date)
+        return history
 
     def convert_price_string(self, price):
         lookup = {'K': 1000, 'M': 1000000, 'B': 1000000000}
