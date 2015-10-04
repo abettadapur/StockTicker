@@ -5,3 +5,20 @@ function HomeController ($scope, StockReport)
     });
 }
 
+function ChartController($scope, StockReport)
+{
+    var historyQuery = StockReport.GetChart({ stock: "AAPL", from: "2015-01-01", to: "2015-10-04" }, function (points) {
+        Morris.Line({
+            element: "morris-area-chart",
+            data: points,
+            xkey: 'Date',
+            ykeys: ['Close'],
+            labels: ['Price'],
+            pointSize: 0,
+            hideHover:'auto',
+            resize: true
+        });
+    });
+    
+}
+

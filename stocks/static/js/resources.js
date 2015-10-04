@@ -5,6 +5,16 @@ stockApp.factory('StockReport', function ($resource) {
         GetReport: {
             method: 'GET',
             isArray: true
+        },
+        GetChart: {
+            method: 'GET',
+            url: '/api/stocks/:stock/history',
+            isArray: true
+        },
+        GetRealtime: {
+            method: 'GET',
+            url: '/api/stocks/:stock/realtime',
+            isArray: false
         }
     });
 });
