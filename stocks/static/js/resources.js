@@ -15,6 +15,11 @@ stockApp.factory('StockReport', function ($resource) {
             method: 'GET',
             url: '/api/stocks/:stock/realtime',
             isArray: false
+        },
+        GetFilteredReports: {
+            method: 'GET', 
+            url: '/api/stocks/filtered_reports',
+            isArray: true
         }
     });
 });
