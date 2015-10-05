@@ -14,7 +14,14 @@ stockApp.factory('StockReport', function ($resource) {
         GetRealtime: {
             method: 'GET',
             url: '/api/stocks/:stock/realtime',
-            isArray: false
+            isArray: false,
+            transformResponse: function(data, headers)
+            {
+                var json = JSON.parse(data);
+                json['percent_change'] = (json['change']/json['open'] * 100.0);
+                json['positive'] = json['percent_change']>0;
+                return json;
+            }
         },
         GetFilteredReports: {
             method: 'GET', 

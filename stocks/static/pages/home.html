@@ -17,12 +17,12 @@
                     <div class="panel-body">
                        <div class="list-group">
                            <li ng-repeat="stock in marketlist" class="list-group-item list-group-item-success" ng-class='{"list-item-group-success": stock.positive, "list-group-item-danger": !stock.positive}'>
-                               {{stock.symbol}}
+                               {{stock.stock.symbol}}
                                <span class="pull-right">
-                                   ${{stock.report.price}}
+                                   ${{stock.price | number: 2}}
                                 </span>
                                 <span class="pull-right text-muted" style="padding-right: 7px;">
-                                   {{stock.report.change}}%
+                                   {{stock.percent_change | number: 2}}%
                                 </span>
                             </li>
                        </div>

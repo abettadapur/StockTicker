@@ -9,16 +9,16 @@ function HomeController ($scope, $route, StockReport)
     })
     
     StockReport.GetRealtime({ stock: "MSFT" }, function (report) {
-        $scope.marketlist.push({symbol: "MSFT", report: report, positive: ((report.change/report.open * 100.0) > 0)});
+        $scope.marketlist.push(report);
     });
     StockReport.GetRealtime({ stock: "AAPL" }, function (report) {
-        $scope.marketlist.push({symbol: "AAPL", report: report, positive: ((report.change/report.open * 100.0) > 0)});
+        $scope.marketlist.push(report);
     });
     StockReport.GetRealtime({ stock: "GOOG" }, function (report) {
-        $scope.marketlist.push({symbol: "GOOG", report: report, positive: ((report.change/report.open * 100.0) > 0)});
+        $scope.marketlist.push(report);
     });
     StockReport.GetRealtime({ stock: "YHOO" }, function (report) {
-        $scope.marketlist.push({symbol: "YHOO", report: report, positive: ((report.change/report.open * 100.0) > 0)});
+        $scope.marketlist.push(report);
     });
 }
 
