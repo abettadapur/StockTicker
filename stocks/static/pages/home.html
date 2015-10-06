@@ -17,6 +17,7 @@
                     <div class="panel-body">
                        <div class="list-group">
                            <li ng-repeat="stock in marketlist" class="list-group-item list-group-item-success" ng-class='{"list-item-group-success": stock.positive, "list-group-item-danger": !stock.positive}'>
+                               
                                {{stock.stock.symbol}}
                                <span class="pull-right">
                                    ${{stock.price | number: 2}}
