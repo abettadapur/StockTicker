@@ -83,6 +83,12 @@ class HistoricalStockResource(Resource):
         else:
             abort(404, message = '{"error": "%s was not found in the database"}' % symbol)
 
+class IndexesResource(Resource):
+    
+    def get(self):
+        finance_api = FinanceApi()
+        return finance_api.get_stock_indexes()
+
 class SettingsResource(Resource):
 	
 	def __init__(self):

@@ -8,17 +8,8 @@ function HomeController ($scope, $route, StockReport)
         $scope.filteredlist = stocks;
     })
     
-    StockReport.GetRealtime({ stock: "MSFT" }, function (report) {
-        $scope.marketlist.push(report);
-    });
-    StockReport.GetRealtime({ stock: "AAPL" }, function (report) {
-        $scope.marketlist.push(report);
-    });
-    StockReport.GetRealtime({ stock: "GOOG" }, function (report) {
-        $scope.marketlist.push(report);
-    });
-    StockReport.GetRealtime({ stock: "YHOO" }, function (report) {
-        $scope.marketlist.push(report);
+    StockReport.GetIndexes({}, function (report) {
+        $scope.marketlist = report;
     });
 }
 

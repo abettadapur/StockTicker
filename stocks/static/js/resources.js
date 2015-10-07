@@ -27,6 +27,19 @@ stockApp.factory('StockReport', function ($resource) {
             method: 'GET', 
             url: '/api/stocks/filtered_reports',
             isArray: true
+        },
+        GetIndexes: {
+            method: 'GET',
+            url: '/api/stocks/indexes',
+            isArray: true,
+            transformResponse: function (data, headers) {
+                var json = JSON.parse(data);
+                json.forEach(function (stock)
+                {
+                    stock['positive'] = (stock['percentage_change'][0] == '+');
+                });
+                return json;
+            }
         }
     });
 });

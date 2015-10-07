@@ -11,6 +11,7 @@ api.add_resource(stock_api.StockReportResource, '/api/stocks/<string:symbol>/rep
 api.add_resource(stock_api.FilteredStockReportResource, '/api/stocks/filtered_reports')
 api.add_resource(stock_api.RealTimeStockResource, '/api/stocks/<string:symbol>/realtime')
 api.add_resource(stock_api.HistoricalStockResource, '/api/stocks/<string:symbol>/history')
+api.add_resource(stock_api.IndexesResource, '/api/stocks/indexes')
 
 @app.route('/')
 def index():

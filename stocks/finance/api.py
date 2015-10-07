@@ -17,6 +17,7 @@ class FinanceApi(object):
         self.historical_url = "http://ichart.yahoo.com/table.csv?s={symbol}&a={from_month}&b={from_date}&c={from_year}&d={to_month}&e={to_date}&f={to_year}&g=d&ignore=.csv"
         self.nasdaqlisted_url = "ftp://ftp.nasdaqtrader.com/SymbolDirectory/nasdaqlisted.txt"
         self.otherlisted_url = "ftp://ftp.nasdaqtrader.com/SymbolDirectory/otherlisted.txt"
+        self.index_url = "http://money.cnn.com/data/markets/"
 
     def get_symbols(self):
 
@@ -140,6 +141,20 @@ class FinanceApi(object):
 
         except ValueError:
             return -1
+
+    def get_stock_indexes(self):
+        html = requests.get(self.index_url).content
+        soup = BeautifulSoup(html, 'lxml')
+        stock_info_tag = soup.find("div", {"class": "markets-overview"})
+        indexes = []
+        for index in stock_info_tag.findAll("a", {"class": "ticker"}):
+            name = index.find("span", {"class": "ticker-name"}).contents[0]
+            points = index.find("span", {"class":"ticker-points"}).contents[0]
+            points_change = index.find("span", {"class":"ticker-points-change"}).contents[0].contents[0]
+            percentage_change = index.find("span", {"class":"ticker-name-change"}).contents[0].contents[0]
+            indexes.append({"name": name, "price": points, "price_change": points_change, "percentage_change": percentage_change})
+
+        return indexes
 
 
 if __name__ == "__main__":
