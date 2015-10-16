@@ -1,4 +1,4 @@
-var stockApp = angular.module('stockServices', ['ngResource']);
+var stockApp = angular.module('stockServices', ['ngResource', 'ngStorage']);
 
 stockApp.factory('StockReport', function ($resource) {
     return $resource('/api/stocks/:stock/report', {}, {

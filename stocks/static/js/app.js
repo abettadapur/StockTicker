@@ -1,5 +1,5 @@
 'use strict';
-var stockApp = angular.module('StockTrackerApp', ['stockServices', 'ngRoute']);
+var stockApp = angular.module('StockTrackerApp', ['stockServices', 'ngRoute', 'ngStorage']);
 
 stockApp.config(function ($routeProvider, $locationProvider) {
     $routeProvider.when('/', {
