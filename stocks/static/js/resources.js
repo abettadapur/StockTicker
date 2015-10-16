@@ -26,7 +26,19 @@ stockApp.factory('StockReport', function ($resource) {
         GetFilteredReports: {
             method: 'GET', 
             url: '/api/stocks/filtered_reports',
-            isArray: true
+            isArray: true,
+            transformResponse: function(data, headers)
+            {
+                var json = JSON.parse(data);
+                json.forEach(function (stock)
+                {
+                    
+                    stock['one_week'] = (stock['one_week'] * 100).toFixed(2);
+                    stock['one_month'] = (stock['one_month'] * 100).toFixed(2);
+                    stock['three_month'] = (stock['three_month'] * 100).toFixed(2);
+                });
+                return json;
+            }
         },
         GetIndexes: {
             method: 'GET',

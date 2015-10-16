@@ -16,15 +16,20 @@
                     </div>
                     <div class="panel-body">
                        <div class="list-group">
-                           <li ng-repeat="stock in marketlist" class="list-group-item list-group-item-success" ng-class='{"list-item-group-success": stock.positive, "list-group-item-danger": !stock.positive}'>
-                               {{stock.name}}
-                               <span class="pull-right">
-                                   ${{stock.price}}
-                                </span>
-                                <span class="pull-right text-muted" style="padding-right: 7px;">
-                                   {{stock.percentage_change}}
-                                </span>
-                            </li>
+                           <table style="padding-top:10px;" class="table table-bordered table-condensed">
+                            <tr>
+                                <th>Index</th>
+                                <th>Last Trade</th>
+                                <th>Percent Change</th>
+                                <th>Price Change</th>
+                            </tr>
+                            <tr ng-repeat="stock in marketlist" ng-class='{"success": stock.positive, "danger": !stock.positive}'>
+                                <td>{{ stock.name}}</td>
+                                <td>${{ stock.price }}</td>
+                                <td>{{ stock.percentage_change }}</td>
+                                <td>{{ stock.price_change }}</td>
+                            </tr>
+                        </table>
                        </div>
                     </div>
                 </div>
@@ -35,17 +40,26 @@
                         <h3 class="panel-title"><i class="fa fa-info-circle"></i>  Top Stocks Today</h3>
                     </div>
                     <div class="panel-body">
-                       <div class="list-group">
-                           <li ng-repeat="stock in filteredlist" class="list-group-item list-group-item-success" ng-class='{"list-item-group-success": stock.positive, "list-group-item-danger": !stock.positive}'>
-                               {{stock.symbol}}
-                               <span class="pull-right">
-                                   ${{stock.report.price}}
-                                </span>
-                                <span class="pull-right text-muted" style="padding-right: 7px;">
-                                   {{stock.report.change}}%
-                                </span>
-                            </li>
-                       </div>
+                       <table style="padding-top:10px;" class="table table-striped table-bordered table-condensed">
+                            <tr>
+                                <th>Stock</th>
+                                <th>Close</th>
+                                <th>Float</th>
+                                <th>1W Growth</th>
+                                <th>1M Growth</th>
+                                <th>3M Growth</th>
+                                <th>Quarterly Growth</th>
+                            </tr>
+                            <tr ng-repeat="stock in filteredlist">
+                                <td>{{ stock.stock.symbol}}</td>
+                                <td>${{ stock.closing_price|number:2 }}</td>
+                                <td>{{ stock.stock_float }}</td>
+                                <td>{{ stock.one_week }}%</td>
+                                <td>{{ stock.one_month }}%</td>
+                                <td>{{ stock.three_month }}%</td>
+                                <td>{{ stock.quarterly_growth }}%</td>
+                            </tr>
+                        </table>
                        <h4 class="text-muted" ng-if="filteredlist.length == 0">
                            No stocks matched your parameters today. Change your parameters in the settings menu
                        </h4>
