@@ -1,16 +1,22 @@
-function HomeController ($scope, $route, StockReport) 
+function HomeController ($scope, $route, $localStorage, StockReport)
 {
     $scope.$route = $route;
     $scope.marketlist = [];
     $scope.filteredlist = [];
-    
+    $scope.watchlist = [];
+
     StockReport.GetFilteredReports({}, function(stocks){
         $scope.filteredlist = stocks;
-    })
+    });
     
     StockReport.GetIndexes({}, function (report) {
         $scope.marketlist = report;
     });
+
+    $scope.addToWatchList = function(symbol) {
+        var single_stock = StockReport.GetRealtime({ stock:symbol.toUpperCase()});
+        $localStorage.push($scope.watchlist.push(single_stock));
+    };
 }
 
 function ChartController($scope, $route, StockReport)
