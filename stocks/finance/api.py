@@ -140,7 +140,7 @@ class FinanceApi(object):
             return int(price)
 
         except ValueError:
-            return -1
+            return None
 
     def get_stock_indexes(self):
         html = requests.get(self.index_url).content
