@@ -1,6 +1,7 @@
 ﻿import threading
 import logging
 import time
+import multiprocessing
 from stocks.models.models import Stock, StockReport
 from stocks.finance.api import FinanceApi
 from stocks import db
@@ -43,17 +44,12 @@ if __name__ == "__main__":
 
     stocks = db.session.query(Stock).all()
 
-    #for stock in stocks:
-    #    logger.info("Processing %s" % stock.symbol)
-    #    stock_report = api.get_stock_information(stock)
-    #    db.session.add(stock_report)
-    #    db.session.commit()
-
     threads = []
     counter = 0
-    for i in range(0, len(stocks), len(stocks)/8):
+    cores = multiprocessing.cpu_count()
+    for i in range(0, len(stocks), len(stocks)/cores):
         counter = counter + 1
-        subset = stocks[i:i+len(stocks)/8]
+        subset = stocks[i:i+len(stocks)/cores]
         threads.append(threading.Thread(target=process_stocks, args=(counter, subset)))
 
     for thread in threads:
