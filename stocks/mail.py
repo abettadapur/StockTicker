@@ -52,57 +52,101 @@ def send_mail(stock_reports):
 	
 	htmlcode += "</TR>"
 	
-	current_color = "deepskyblue"
+	rows = []
 
 	for report in stock_reports:
 	
+		report_dict = report.as_dict()
+		stock_dict = report_dict["stock"]
+		
+		symbol = stock_dict["symbol"]
+		if symbol == None:
+			continue
+		
+		price = report_dict["closing_price"]
+		if price == None:
+			price = ""
+		else:
+			price = '$' + str(report_dict["closing_price"])
+		
+		stock_float = report_dict["stock_float"]
+		if stock_float == None:
+			stock_float = ""
+		else:
+			stock_float = str(int(report_dict["stock_float"]))
+			
+		growth = report_dict["quarterly_growth"]
+		if growth == None:
+			growth = ""
+		else:
+			growth = str(report_dict["quarterly_growth"]) + '%'
+		
+		one_week = report_dict["one_week"]
+		if one_week == None:
+			one_week = ""
+		else:
+			one_week = str('%.2f'%(report_dict["one_week"]*10)) + '%'
+			
+		one_month = report_dict["one_month"]
+		if one_month == None:
+			one_month = ""
+		else:
+			one_month = str('%.2f'%(report_dict["one_month"]*10)) + '%'
+			
+		three_month = report_dict["three_month"]
+		if three_month == None:
+			three_month = ""
+		else:
+			three_month = str('%.2f'%(report_dict["three_month"]*10)) + '%'
+		
+		row = ""
+		
+		row += symbol
+		row += "</font></TD>"
+		
+		row += "<TD align=\"right\"><font face=\"verdana\">"
+		row += price
+		row += "</font></TD>"
+		
+		row += "<TD align=\"right\"><font face=\"verdana\">"
+		row += stock_float
+		row += "</font></TD>"
+		
+		row += "<TD align=\"right\"><font face=\"verdana\">"
+		row += growth
+		row += "</font></TD>"
+		
+		row += "<TD align=\"right\"><font face=\"verdana\">"
+		row += one_week
+		row += "</font></TD>"
+		
+		row += "<TD align=\"right\"><font face=\"verdana\">"
+		row += one_month
+		row += "</font></TD>"
+		
+		row += "<TD align=\"right\"><font face=\"verdana\">"
+		row += three_month
+		row += "</font></TD>"
+		
+		row += "</TR>"
+		
+		rows.append(row)
+		
+	rows.sort()
+	
+	current_color = "deepskyblue"
+	
+	for row in rows:
 		if current_color == "deepskyblue":
 			current_color = "white"
 		elif current_color == "white":
 			current_color = "deepskyblue"
 	
-		htmlcode += "<TR style=\"background-color:" + current_color + ";font-size:13px\">"
-	
-		report_dict = report.as_dict()
-		stock_dict = report_dict["stock"]
+		row = "<TR style=\"background-color:" + current_color + ";font-size:13px\"><TD><font face=\"verdana\">" + row
+		htmlcode += row
 		
-		htmlcode += "<TD><font face=\"verdana\">"
-		htmlcode += stock_dict["symbol"]
-		htmlcode += "</font></TD>"
-		
-		htmlcode += "<TD><font face=\"verdana\">"
-		htmlcode += '$' + str(report_dict["closing_price"])
-		htmlcode += "</font></TD>"
-		
-		htmlcode += "<TD><font face=\"verdana\">"
-		#htmlcode += str(int(report_dict["stock_float"]))
-		htmlcode += str(report_dict["stock_float"])
-		htmlcode += "</font></TD>"
-		
-		htmlcode += "<TD><font face=\"verdana\">"
-		htmlcode += str(report_dict["quarterly_growth"]) + '%'
-		htmlcode += "</font></TD>"
-		
-		htmlcode += "<TD><font face=\"verdana\">"
-		#htmlcode += str('%.2f'%(report_dict["one_week"])) + '%'
-		htmlcode += str(report_dict["one_week"]) + '%'
-		htmlcode += "</font></TD>"
-		
-		htmlcode += "<TD><font face=\"verdana\">"
-		#htmlcode += str('%.2f'%(report_dict["one_month"])) + '%'
-		htmlcode += str(report_dict["one_month"]) + '%'
-		htmlcode += "</font></TD>"
-		
-		htmlcode += "<TD><font face=\"verdana\">"
-		#htmlcode += str('%.2f'%(report_dict["three_month"])) + '%'
-		htmlcode += str(report_dict["three_month"]) + '%'
-		htmlcode += "</font></TD>"
-		
-		htmlcode += "</TR>"
 
 	htmlcode += "</TABLE>"
-	
-	print htmlcode
 	
 	#email_dot_html.write(htmlcode)
 
