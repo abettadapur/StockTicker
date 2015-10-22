@@ -1,0 +1,21 @@
+\contentsline {section}{\numberline {1}Design Alternatives}{2}
+\contentsline {subsection}{\numberline {1.1}Alternative 1: Native Client}{2}
+\contentsline {subsubsection}{\numberline {1.1.1}Pros}{2}
+\contentsline {subsubsection}{\numberline {1.1.2}Cons}{2}
+\contentsline {subsection}{\numberline {1.2}Alternative 2: Web Service}{3}
+\contentsline {subsubsection}{\numberline {1.2.1}Pros}{3}
+\contentsline {subsubsection}{\numberline {1.2.2}Cons}{3}
+\contentsline {subsection}{\numberline {1.3}Alternative 3: Web Server with Thin Client}{3}
+\contentsline {subsubsection}{\numberline {1.3.1}Pros}{3}
+\contentsline {subsubsection}{\numberline {1.3.2}Cons}{3}
+\contentsline {section}{\numberline {2}Final Design and Rationale}{4}
+\contentsline {subsection}{\numberline {2.1}Static Design}{4}
+\contentsline {subsection}{\numberline {2.2}Dynamic Design}{4}
+\contentsline {section}{\numberline {3}Data}{6}
+\contentsline {subsection}{\numberline {3.1}Database}{6}
+\contentsline {subsection}{\numberline {3.2}Report}{7}
+\contentsline {section}{\numberline {4}Detailed Design}{7}
+\contentsline {subsection}{\numberline {4.1}Static Design}{7}
+\contentsline {subsection}{\numberline {4.2}Dynamic Design}{8}
+\contentsline {section}{\numberline {5}UI}{9}
+\contentsline {section}{\numberline {6}Validation}{9}

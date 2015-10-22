@@ -1,0 +1,10 @@
+\beamer@endinputifotherversion {3.36pt}
+\beamer@sectionintoc {1}{Introduction}{3}{0}{1}
+\beamer@sectionintoc {2}{Product Vision}{4}{0}{2}
+\beamer@sectionintoc {3}{Design Alternatives}{7}{0}{3}
+\beamer@sectionintoc {4}{Final Design}{14}{0}{4}
+\beamer@subsectionintoc {4}{1}{Static Design}{15}{0}{4}
+\beamer@subsectionintoc {4}{2}{Dynamic Design}{18}{0}{4}
+\beamer@sectionintoc {5}{Project plan}{19}{0}{5}
+\beamer@sectionintoc {6}{Status}{21}{0}{6}
+\beamer@sectionintoc {7}{Short Demo}{22}{0}{7}
