@@ -1,0 +1,69 @@
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry} 
+\usepackage{graphicx} 
+\usepackage{amsmath,amsfonts,amsthm} 
+\usepackage{hyperref}
+\usepackage{mathtools}
+\usepackage{braket}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{conj}[thm]{Conjecture}
+
+
+\begin{document}
+\centerline{\bf Product Vision}
+
+\section{Motivation/Opportunity} 
+
+The project SPED (search, predict, execute, decide) will be an automated stock analysis tool that monitors the performance of all public companies on NASDAQ and NYSE. SPED should help with small scale trading (i.e. on the individual level) by providing analysis of a large number of stocks that would otherwise require a background in trading or an outside advisor. We hope that SPED will be able to replace these kinds of services with automated analysis. The goal is SPED is not to be a trading algorithm, but rather to provide a concise summary of a vast array of information so that the user can make informed trading decisions without the need of a large time investment or an advisor.
+
+\section{Problem Statement}
+
+\begin{center}
+    \begin{tabular}{ |  l | p{5cm} |}
+    \hline
+    The problem of & Gathering and analysing large amounts of stock data\\ \hline
+    Affects & individual traders  \\ \hline
+    The impact of which is & to consume a large amount of time and effort of \\ \hline
+    A successful solution would be & A tool that does the work of gathering and analyzing data and then reports the results to the user who can make an informed decision with much less manual data acquisition and analysis\\  \hline
+    \end{tabular}
+\end{center}
+
+\section{Product Position Statement}
+
+\begin{center}
+    \begin{tabular}{ |  l | p{5cm} |}
+    \hline
+    For & Individuals looking to trade stocks\\ \hline
+    Who & need to perform a large amount of data gathering and analysis \\ \hline
+    Our System & is software\\ \hline
+    That & will perform the manual data gathering/analysis at specified intervals\\  \hline
+    Unlike & Most Trading/Data analysis software\\  \hline
+    Our  Product & will be freely available and use only public sources of data\\  \hline
+    \end{tabular}
+\end{center}
+
+\section{User Demographics}
+
+There is one main category of users of SPED: individual traders (end users). These are people who are looking to invest their own assets (i.e. not trading on a large scale) into stocks and need information about and analysis of stocks in order to make informed trading decisions without the need for an advisor. These users will not need any knowledge of how the project is implemented. They will be expected to be able to manipulate the program (through a typical GUI or otherwise) in order to set the values for analysis. The user will also be expected to have access to an email account since this program will notify them of the analysis results via email.
+
+
+\section{Features as User Stories}
+
+As an end user,  I want to be able to enter threshold values for the analysis portion of the software in order to tune the results to  my trading needs.\\\\
+As an end user, I want to be able to schedule the frequency of reports.
+\\\\
+As an end user, I want to receive reports, formatted in an understandable way, about the stocks that fit my requirements.
+
+\section{Constraints}
+
+Internet Availability: Application requires internet access in order to gather data and send the correct notifications regarding stocks.
+\\\\
+Stock APIs: Application requires access to public APIs in order to gather data
+
+\end{document}
