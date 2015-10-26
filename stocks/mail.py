@@ -156,8 +156,8 @@ def send_mail(stock_reports):
 			auth=("api", config.MAILGUN_KEY),
 			data={
 				"from": "{0} <{1}@bettadapur.com>".format(config.FROM_NAME, config.FROM_ADDR),
-				"to": ["kendallmerritt@gmail.com"],
-				"subject": config.SUBJECT.format(datetime.date.today()),
+				"to": ["kendallmerritt@gmail.com", "alexbettadapur@gmail.com"],
+				"subject": config.SUBJECT.format(date = datetime.date.today()),
 				"text": "",
 				"html": htmlcode
 			})
