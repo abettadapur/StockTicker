@@ -1,0 +1,25 @@
+<TABLE cellpadding="4">
+	<caption>
+		<font face="verdana" size="4">This Week's Stocks</font>
+	</caption>
+	<TR style="background-color:dodgerblue;font-size:14px">
+		<TH><font face="verdana">Symbol</font></TH>
+		<TH><font face="verdana">Price</font></TH>
+		<TH><font face="verdana">Float</font></TH>
+		<TH><font face="verdana">Quarterly Growth</font></TH>
+		<TH><font face="verdana">Movement - 1 week</font></TH>
+		<TH><font face="verdana">Movement - 1 month</font></TH>
+		<TH><font face="verdana">Movement - 3 month</font></TH>
+	</TR>
+	{% for stock_report in stocks %}
+	<TR style="background-color:white;font-size:13px">
+		<TD><font face="verdana">{{stock_report.stock.symbol}}</font></TD>
+		<TD align="right"><font face="verdana">{{stock_report.closing_price}}</font></TD>
+		<TD align="right"><font face="verdana">{{stock_report.stock_float}}</font></TD>
+		<TD align="right"><font face="verdana">{{stock_report.quarterly_growth}}%</font></TD>
+		<TD align="right"><font face="verdana">{{stock_report.one_week}}%</font></TD>
+		<TD align="right"><font face="verdana">{{stock_report.one_month}}%</font></TD>
+		<TD align="right"><font face="verdana">{{stock_report.three_month}}%</font></TD>
+	</TR>
+	{%endfor%}
+</TABLE>

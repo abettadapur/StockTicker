@@ -26,7 +26,7 @@ def process_stocks(thread_id, stocks):
 
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO)
+    logging.basicConfig(level=logging.INFO, filename="logs/%s_job.log"%time.time())
     logger = logging.getLogger(__name__)
     logging.getLogger("requests").setLevel(logging.WARNING)
     api = FinanceApi()
@@ -62,8 +62,5 @@ if __name__ == "__main__":
 
 
 
-    filtered_stocks = StockReport.query.filter(StockReport.stock_float is not None).filter(
-        StockReport.stock_float < 300000000).filter(StockReport.quarterly_growth > 25.0).filter(
-        StockReport.one_week > 0.10).filter(StockReport.one_month > 0.15).filter(StockReport.three_month > 0.25)
-        .filter(StockReport.timestamp > datetime.datetime.utcnow() - datetime.timedelta(days=2))
+    filtered_stocks = StockReport.query.filter(StockReport.stock_float is not None).filter(StockReport.stock_float < 300000000).filter(StockReport.quarterly_growth > 25.0).filter(StockReport.one_week > 0.10).filter(StockReport.one_month > 0.15).filter(StockReport.three_month > 0.25).filter(StockReport.timestamp > datetime.datetime.utcnow() - datetime.timedelta(days=2))
     mail.send_mail(filtered_stocks)
