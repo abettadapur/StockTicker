@@ -3,6 +3,7 @@ from stocks.etc import config
 import logging
 
 if __name__ == '__main__':
+	
 	logging.basicConfig(level=logging.INFO, filename="logs/server.log")
 	logger = logging.getLogger(__name__)
 	handler = logging.StreamHandler()
@@ -13,4 +14,6 @@ if __name__ == '__main__':
 	logger = logging.getLogger("werkzeug")
 	logger.addHandler(handler)
 	logger.info("Starting server")
+	
+	
 	app.run(config.BIND, config.PORT, debug=True)
