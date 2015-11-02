@@ -5,6 +5,7 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.triangle import Triangle
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
+from apscheduler.executors.pool import ProcessPoolExecutor
 from apscheduler.triggers.cron import CronTrigger
 
 
@@ -20,6 +21,9 @@ from stocks import cronjob
 scheduler = BackgroundScheduler(
 	jobstores= {
 		'default': SQLAlchemyJobStore(url='sqlite:///stocks/data/temp.db')
+	},
+	executors = {
+		'default': ProcessPoolExecutor(1)
 	},
 	job_defaults={
 		'max_instances': 1,

@@ -91,7 +91,7 @@
                                 <th>Year Low</th>
                                 <th>Year High</th>
                             </tr>
-                            <tr ng-repeat="stock in watchlist" ng-class='{"success": stock.positive, "danger": !stock.positive}'>
+                            <tr ng-repeat="stock in $storage.watchlist" ng-class='{"success": stock.positive, "danger": !stock.positive}'>
                                 <td>{{ stock.stock.symbol }}</td>
                                 <td>{{ stock.price }}</td>
                                 <td>{{ stock.volume }}</td>

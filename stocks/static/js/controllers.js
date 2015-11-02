@@ -3,7 +3,9 @@ function HomeController ($scope, $route, $localStorage, StockReport)
     $scope.$route = $route;
     $scope.marketlist = [];
     $scope.filteredlist = [];
-    $scope.watchlist = [];
+    $scope.$storage =$localStorage.$default({
+        watchlist: []
+    });
 
     StockReport.GetFilteredReports({}, function(stocks){
         $scope.filteredlist = stocks;
@@ -15,7 +17,7 @@ function HomeController ($scope, $route, $localStorage, StockReport)
 
     $scope.addToWatchList = function(symbol) {
         var single_stock = StockReport.GetRealtime({ stock:symbol.toUpperCase()});
-        $localStorage.push($scope.watchlist.push(single_stock));
+        $localStorage.watchlist.push(single_stock);
     };
 }
 
