@@ -44,6 +44,19 @@ class StockReport(db.Model):
         dict_repr['timestamp'] = time.mktime(dict_repr['timestamp'].timetuple())
         dict_repr['stock'] = self.stock.as_dict()
         return dict_repr
+    
+    @staticmethod   
+    def get_filtered_reports():
+        max_date = db.session.query(db.func.max(StockReport.timestamp)).scalar()
+        return StockReport.query \
+        .filter(StockReport.stock_float is not None) \
+        .filter(StockReport.stock_float < 300000000) \
+        .filter(StockReport.quarterly_growth > 25.0) \
+        .filter(StockReport.one_week > 10.0) \
+        .filter(StockReport.one_month > 15.0) \
+        .filter(StockReport.three_month > 25.0) \
+        .filter(StockReport.timestamp == max_date) \
+        .all()
 
 class StockDetail(db.Model):
     id = db.Column(db.Integer, primary_key=True)

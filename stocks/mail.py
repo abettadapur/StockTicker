@@ -1,7 +1,7 @@
 ﻿import requests
 import datetime
 from stocks.models.models import Stock, StockReport
-from etc import config
+from etc import config, util
 from jinja2 import Environment, PackageLoader
 
 def send_mail(stock_reports):
@@ -19,37 +19,38 @@ def send_mail(stock_reports):
 		if report_dict["closing_price"] == None:
 			report_dict["closing_price"] = ""
 		else:
-			report_dict["closing_price"] = '$' + str(report_dict["closing_price"])
+			report_dict["closing_price"] = str(report_dict["closing_price"])
 		
 		if report_dict["stock_float"] == None:
 			report_dict["stock_float"] = ""
 		else:
-			report_dict["stock_float"] = str(int(report_dict["stock_float"]))
+			report_dict["stock_float"] = util.make_price_string(int(report_dict["stock_float"]))
 			
 		if report_dict["quarterly_growth"] == None:
 			report_dict["quarterly_growth"] = ""
 		else:
-			report_dict["quarterly_growth"] = str(report_dict["quarterly_growth"]) + '%'
+			report_dict["quarterly_growth"] = str(report_dict["quarterly_growth"]) 
 	
 		if report_dict["one_week"] == None:
 			report_dict["one_week"] = ""
 		else:
-			report_dict["one_week"] = str('%.2f'%(report_dict["one_week"]*10)) + '%'
+			report_dict["one_week"] = str('%.2f'%(report_dict["one_week"]))
 			
 		if report_dict["one_month"] == None:
 			report_dict["one_month"] = ""
 		else:
-			report_dict["one_month"] = str('%.2f'%(report_dict["one_month"]*10)) + '%'
+			report_dict["one_month"] = str('%.2f'%(report_dict["one_month"]))
 			
 		if report_dict["three_month"] == None:
 			report_dict["three_month"] = ""
 		else:
-			report_dict["three_month"] = str('%.2f'%(report_dict["three_month"]*10)) + '%'
+			report_dict["three_month"] = str('%.2f'%(report_dict["three_month"]))
 		
 		formatted_reports.append(report_dict)	
 	
 	
 	htmlcode = mailtemplate.render(stocks=formatted_reports)
+	print htmlcode
 	try:
 		requests.post(
 			"https://api.mailgun.net/v3/bettadapur.com/messages",

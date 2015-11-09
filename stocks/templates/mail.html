@@ -14,7 +14,7 @@
 	{% for stock_report in stocks %}
 	<TR style="background-color:white;font-size:13px">
 		<TD><font face="verdana">{{stock_report.stock.symbol}}</font></TD>
-		<TD align="right"><font face="verdana">{{stock_report.closing_price}}</font></TD>
+		<TD align="right"><font face="verdana">${{stock_report.closing_price}}</font></TD>
 		<TD align="right"><font face="verdana">{{stock_report.stock_float}}</font></TD>
 		<TD align="right"><font face="verdana">{{stock_report.quarterly_growth}}%</font></TD>
 		<TD align="right"><font face="verdana">{{stock_report.one_week}}%</font></TD>

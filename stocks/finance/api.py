@@ -5,6 +5,7 @@ import StringIO
 import time
 import re
 from datetime import datetime, date, time
+from stocks.etc.util import convert_price_string
 from dateutil.relativedelta import relativedelta
 from bs4 import BeautifulSoup
 from stocks.models.models import Stock, StockReport, StockDetail
@@ -109,17 +110,17 @@ class FinanceApi(object):
         three_month_history = share.get_historical(three_month, today)
 
         if len(one_week_history) > 0:
-            stock_report.one_week = (float(one_week_history[0]['Close']) - float(one_week_history[-1]['Open']))/float(one_week_history[-1]["Open"])
+            stock_report.one_week = ((float(one_week_history[0]['Close']) - float(one_week_history[-1]['Open']))/float(one_week_history[-1]["Open"])) * 100.0
         else:
             stock_report.one_week = None;
 
         if len(one_month_history) > 0:
-            stock_report.one_month = (float(one_month_history[0]['Close']) - float(one_month_history[-1]['Open']))/float(one_month_history[-1]["Open"])
+            stock_report.one_month = ((float(one_month_history[0]['Close']) - float(one_month_history[-1]['Open']))/float(one_month_history[-1]["Open"])) * 100.0
         else:
             stock_report.one_month = None;
 
         if len(three_month_history) > 0:
-            stock_report.three_month = (float(three_month_history[0]['Close']) - float(three_month_history[-1]['Open']))/float(three_month_history[-1]["Open"])
+            stock_report.three_month = ((float(three_month_history[0]['Close']) - float(three_month_history[-1]['Open']))/float(three_month_history[-1]["Open"])) * 100.0
         else:
             stock_report.three_month = None;
 
@@ -127,20 +128,6 @@ class FinanceApi(object):
         share = Share(stock.symbol)
         history = share.get_historical(from_date, to_date)
         return history
-
-    def convert_price_string(self, price):
-        lookup = {'K': 1000, 'M': 1000000, 'B': 1000000000}
-        unit = price[-1]
-        try:
-            number = float(price[:-1])
-
-            if unit in lookup:
-                return lookup[unit] * number
-
-            return int(price)
-
-        except ValueError:
-            return None
 
     def get_stock_indexes(self):
         html = requests.get(self.index_url).content

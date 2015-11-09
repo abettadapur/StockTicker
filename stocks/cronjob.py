@@ -1,6 +1,7 @@
 ﻿import threading
 import logging
 import time
+import datetime
 import multiprocessing
 from stocks.models.models import Stock, StockReport
 from stocks.finance.api import FinanceApi
@@ -10,7 +11,9 @@ from stocks import mail
 
 def process_stocks(thread_id, stocks):
     session = db.create_scoped_session()
+    logging.basicConfig(level=logging.INFO, filename="logs/%s_job.log"%time.strftime('%m_%d_%Y'))
     logger = logging.getLogger("Thread %d"%thread_id)
+    api = FinanceApi()
     total = len(stocks)
     counter = 0
     for stock in stocks:
@@ -22,11 +25,11 @@ def process_stocks(thread_id, stocks):
             session.add(stock_report)
             session.commit()
         except Exception as ex:
-            logger.error("Failed to process %s" % stock.symbol)
+            logger.error("Failed to process %s: %s" % (stock.symbol, ex)) 
 
 
 def runjob():
-    logging.basicConfig(level=logging.INFO, filename="logs/%s_job.log"%time.time())
+    logging.basicConfig(level=logging.INFO, filename="logs/%s_job.log"%time.strftime('%m_%d_%Y'))
     logger = logging.getLogger("cronjob")
     logging.getLogger("requests").setLevel(logging.WARNING)
     api = FinanceApi()
@@ -44,25 +47,31 @@ def runjob():
 
     stocks = db.session.query(Stock).all()
 
-    threads = []
-    counter = 0
-    cores = multiprocessing.cpu_count()
-    for i in range(0, len(stocks), len(stocks)/cores):
-        counter = counter + 1
-        subset = stocks[i:i+len(stocks)/cores]
-        threads.append(threading.Thread(target=process_stocks, args=(counter, subset)))
+    # threads = []
+    # counter = 0
+    # cores = multiprocessing.cpu_count()
+    # print cores
+    # for i in range(0, len(stocks), len(stocks)/cores):
+    #     counter = counter + 1
+    #     subset = stocks[i:i+len(stocks)/cores]
+    #     threads.append(multiprocessing.Process(target=process_stocks, args=(counter, subset)))
 
-    for thread in threads:
-        thread.daemon = True
-        thread.start()
+    # for thread in threads:
+    #     thread.start()
+    
+    # timeout = datetime.datetime.utcnow() + datetime.timedelta(hours=2, minutes=30)
+    # while threading.active_count() > 2:
+    #     print threading.active_count()
+    #     if datetime.datetime.utcnow() > timeout:
+    #         logger.error("TIMEOUT, terminating threads")
+    #         for thread in threads:
+    #             thread.terminate();
+                
+    #     time.sleep(5)
 
-    while threading.active_count() > 1:
-        print threading.active_count()
-        time.sleep(5)
 
-
-
-    filtered_stocks = StockReport.query.filter(StockReport.stock_float is not None).filter(StockReport.stock_float < 300000000).filter(StockReport.quarterly_growth > 25.0).filter(StockReport.one_week > 0.10).filter(StockReport.one_month > 0.15).filter(StockReport.three_month > 0.25).filter(StockReport.timestamp > datetime.datetime.utcnow() - datetime.timedelta(days=2))
+    logger.info("Sending emails")
+    filtered_stocks = StockReport.get_filtered_reports()
     mail.send_mail(filtered_stocks)
     
 def testjob():
