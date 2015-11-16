@@ -11,7 +11,12 @@ stockApp.config(function ($routeProvider, $locationProvider) {
         templateUrl: 'static/pages/charts.html',
         controller: ChartController,
         activetab: 'charts'
-    });
+    })
+        .when('/settings', {
+            templateUrl: 'static/pages/settings.html',
+            controller: SettingsController,
+            activetab: 'settings'
+        });
     //add more routes here
 });
 
