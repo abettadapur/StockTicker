@@ -17,7 +17,9 @@ function HomeController ($scope, $route, $localStorage, StockReport)
 
     $scope.addToWatchList = function(symbol) {
         var single_stock = StockReport.GetRealtime({ stock:symbol.toUpperCase()});
-        $localStorage.watchlist.push(single_stock);
+        if (single_stock) {
+            $localStorage.watchlist.push(single_stock);
+        }
     };
     
     $scope.getShortNumber = function(number)
@@ -80,7 +82,45 @@ function ChartController($scope, $route, StockReport)
         });
         
     };
-    
-    
+}
+
+function SettingsController($scope) {
+    //get emails from backend
+    //get current attribute values from backend
+    var user_settings = {};
+    $scope.userSettings = {};
+    //Get current values from backend:
+    //Temp default values:
+    $scope.userSettings.floatValue = 300000000;
+    $scope.userSettings.revenueGrowth = 25;
+    $scope.userSettings.oneWeek = 10;
+    $scope.userSettings.oneMonth = 15;
+    $scope.userSettings.threeMonth = 25;
+    $scope.userSettings.emailList = [];
+    $scope.submit = function(UserSettingsForm) {
+
+        if ($scope.email) {
+            $scope.userSettings.emailList.push($scope.email);
+        }
+        user_settings = {
+            params : {
+                'email' : $scope.userSettings.emailList,
+                'floatValue' : $scope.userSettings.floatValue,
+                'revenueGrowth' : $scope.userSettings.revenueGrowth,
+                'oneWeek' : $scope.userSettings.oneWeek,
+                'oneMonth' : $scope.userSettings.oneMonth,
+                'threeMonth' : $scope.userSettings.threeMonth
+            }
+        };
+        $scope.UserSettingsForm.email.$setPristine();
+        $scope.UserSettingsForm.email.$setPristine(true);
+        $scope.email = '';
+        console.log(user_settings);
+    };
+    $scope.deleteEmail = function(email) {
+        var index_email = $scope.userSettings.emailList.indexOf(email);
+        $scope.userSettings.emailList.splice(index_email, 1);
+        //Delete email from backend
+    }
 }
 
