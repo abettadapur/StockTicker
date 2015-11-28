@@ -88,20 +88,35 @@ class StockDetail(db.Model):
 
 class Setting(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    display_name = db.Column(db.String(100))
-    key = db.Column(db.String(30), unique=True)
-    value = db.Column(db.String(100), unique=True)
-    type = db.Column(db.String(10))
+    one_week_threshold = db.Column(db.Float)
+    one_week_greater = db.Column(db.Boolean)
+    one_month_threshold = db.Column(db.Float)
+    one_month_greater = db.Column(db.Boolean)
+    three_month_threshold = db.Column(db.Float)
+    three_month_greater = db.Column(db.Boolean)
+    quarterly_growth_threshold = db.Column(db.Float)
+    quarterly_growth_greater = db.Column(db.Boolean)
+    float_threshold = db.Column(db.Float)
+    float_greater = db.Column(db.Boolean)
 
-    def __init__(self, name, key, value):
-        self.display_name = name
-        self.key = key
-        self.value = value
-        self.type = type(value).__name__
+    def __init__(self):
+       pass
 
     def __repr__(self):
-        return '<Setting %r>' % self.key
+        return '<Setting %r>' % self.id
 
     def as_dict(self):
         dict_repr = {c.name: getattr(self, c.name) for c in self.__table__.columns}
         return dict_repr
+        
+class Email(db.Model):
+    email = db.Column(db.String(150), unique=True, primary_key=True)
+    
+    def __init__(self, email):
+        self.email = email
+    
+    def __repr__(self):
+        return '<Email %s>' % self.email
+    
+    def as_dict(self):
+        return self.email

@@ -1,6 +1,6 @@
 ﻿from stocks import db
 from flask_restful import Resource, reqparse, abort
-from stocks.models.models import Stock, StockReport, StockDetail, Setting
+from stocks.models.models import Stock, StockReport, StockDetail, Setting, Email
 from stocks.finance.api import FinanceApi
 import datetime
 
@@ -98,9 +98,6 @@ class IndexesResource(Resource):
 class SettingsResource(Resource):
     def __init__(self):
         self.reqparse = reqparse.RequestParser()
-        self.reqparse.add_argument('key', type=str, required=False, location='args', help='No token to verify')
-
-        self.create_reqparse = reqparse.RequestParser()
         self.reqparse.add_argument('name', type=str, required=True, location='json',
                                    help='Need a display name for the setting')
         self.reqparse.add_argument('key', type=str, required=True, location='json',
@@ -110,18 +107,54 @@ class SettingsResource(Resource):
         super(SettingsResource, self).__init__()
 
     def get(self):
-        args = self.reqparse.parse_args()
-        key = args['key']
-
-        if key is not None:
-            settings = Setting.query.filter(Setting.key == key)
-            if len(settings) == 0:
-                abort(404, message='{"error": "No setting with this key was found"}')
-            else:
-                return [c.as_dict() for c in settings]
-
-        else:
-            return [c.as_dict() for c in Setting.query.all()]
+        return (Setting.query.all()[0]).as_dict()
 
     def post(self):
-        pass
+        args = self.reqparse.parse_args()
+
+
+class EmailResource(Resource):
+    def __init__(self):
+        self.reqparse = reqparse.RequestParser()
+        self.reqparse.add_argument('email', type=str, required=True, location='json', help='Need email address in POST')
+        
+        self.update_reqparse = reqparse.RequestParser()
+        self.update_reqparse.add_argument('email', type=str, required=True, location='json', help='Need email address in PUT')
+        self.update_reqparse.add_argument('old_email', type=str, required=True, location='json', help='Need old email address in PUT')
+        
+        super(EmailResource, self).__init__()
+    
+    
+    def get(self):
+        emails = Email.query.all()
+        return [e.as_dict() for e in emails]
+        
+    def post(self):
+        args = self.reqparse.parse_args()
+        email_str = args['email']
+        
+        if Email.query.filter(Email.email == email_str).scalar():
+            return "This email already exists in the database", 400
+        
+        email = Email(email_str)
+        db.session.add(email)
+        db.session.commit()
+        
+        return "Added", 200
+ 
+class DeleteEmailResource(Resource):
+    def __init__(self):
+        super(DeleteEmailResource, self).__init__()
+        
+    def delete(self, email):
+        print email
+        email_record = Email.query.filter(Email.email == email).scalar()
+        if email_record:
+            db.session.delete(email_record)
+            db.session.commit()
+            
+       
+       
+     
+        
+        
