@@ -47,29 +47,25 @@ def runjob():
 
     stocks = db.session.query(Stock).all()
 
-    # threads = []
-    # counter = 0
-    # cores = multiprocessing.cpu_count()
-    # print cores
-    # for i in range(0, len(stocks), len(stocks)/cores):
-    #     counter = counter + 1
-    #     subset = stocks[i:i+len(stocks)/cores]
-    #     threads.append(multiprocessing.Process(target=process_stocks, args=(counter, subset)))
+    threads = []
+    counter = 0
+    cores = multiprocessing.cpu_count()
+    print cores
+    for i in range(0, len(stocks), len(stocks)/cores):
+        counter = counter + 1
+        subset = stocks[i:i+len(stocks)/cores]
+        threads.append(multiprocessing.Process(target=process_stocks, args=(counter, subset)))
 
-    # for thread in threads:
-    #     thread.start()
+    for thread in threads:
+        thread.start()
     
-    # timeout = datetime.datetime.utcnow() + datetime.timedelta(hours=2, minutes=30)
-    # while threading.active_count() > 2:
-    #     print threading.active_count()
-    #     if datetime.datetime.utcnow() > timeout:
-    #         logger.error("TIMEOUT, terminating threads")
-    #         for thread in threads:
-    #             thread.terminate();
-                
-    #     time.sleep(5)
-
-
+    for thread in threads:
+        thread.join(timeout=9000)
+        try:
+            thread.terminate()
+        except:
+            pass
+             
     logger.info("Sending emails")
     filtered_stocks = StockReport.get_filtered_reports()
     mail.send_mail(filtered_stocks)

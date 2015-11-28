@@ -38,9 +38,9 @@ class FilteredStockReportResource(Resource):
         args = self.reqparse.parse_args()
         stock_float = args['float'] if args['float'] is not None else 300000000
         yoy_growth = args['yoy_growth'] if args['yoy_growth'] is not None else 25.0
-        onew_growth = args['onew_growth'] if args['onew_growth'] is not None else 0.10
-        onem_growth = args['onem_growth'] if args['onem_growth'] is not None else 0.15
-        threem_growth = args['threem_growth'] if args['threem_growth'] is not None else 0.25
+        onew_growth = args['onew_growth'] if args['onew_growth'] is not None else 10.0
+        onem_growth = args['onem_growth'] if args['onem_growth'] is not None else 15.0
+        threem_growth = args['threem_growth'] if args['threem_growth'] is not None else 25.0
 
         filtered_stocks = StockReport.query.filter(StockReport.stock_float is not None).filter(
             StockReport.stock_float < stock_float).filter(StockReport.quarterly_growth > yoy_growth).filter(

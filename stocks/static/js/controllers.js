@@ -19,6 +19,18 @@ function HomeController ($scope, $route, $localStorage, StockReport)
         var single_stock = StockReport.GetRealtime({ stock:symbol.toUpperCase()});
         $localStorage.watchlist.push(single_stock);
     };
+    
+    $scope.getShortNumber = function(number)
+    {
+        if(number < 1000)
+            return String(number);
+        else if(number < 1000000)
+            return String(number/1000)+'K';
+        else if(number < 1000000000)
+            return String(number/1000000) + 'M';
+        else 
+            return String(number/1000000000) + 'B';
+    }
 }
 
 function ChartController($scope, $route, StockReport)

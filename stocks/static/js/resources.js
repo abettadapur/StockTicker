@@ -33,9 +33,9 @@ stockApp.factory('StockReport', function ($resource) {
                 json.forEach(function (stock)
                 {
                     
-                    stock['one_week'] = (stock['one_week'] * 100).toFixed(2);
-                    stock['one_month'] = (stock['one_month'] * 100).toFixed(2);
-                    stock['three_month'] = (stock['three_month'] * 100).toFixed(2);
+                    stock['one_week'] = (stock['one_week']).toFixed(2);
+                    stock['one_month'] = (stock['one_month']).toFixed(2);
+                    stock['three_month'] = (stock['three_month']).toFixed(2);
                 });
                 return json;
             }

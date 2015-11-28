@@ -78,7 +78,7 @@ class FinanceApi(object):
 
         for elem in soup(text="Float:"):
             try:
-                stock_report.stock_float = self.convert_price_string(elem.parent.next_sibling.string)
+                stock_report.stock_float = convert_price_string(elem.parent.next_sibling.string)
             except ValueError:
                 stock_report.stock_float = None
 

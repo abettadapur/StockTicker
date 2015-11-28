@@ -53,7 +53,7 @@
                             <tr ng-repeat="stock in filteredlist">
                                 <td>{{ stock.stock.symbol}}</td>
                                 <td>${{ stock.closing_price|number:2 }}</td>
-                                <td>{{ stock.stock_float }}</td>
+                                <td>{{ getShortNumber(stock.stock_float) }}</td>
                                 <td>{{ stock.one_week }}%</td>
                                 <td>{{ stock.one_month }}%</td>
                                 <td>{{ stock.three_month }}%</td>
