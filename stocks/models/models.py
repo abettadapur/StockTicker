@@ -89,15 +89,10 @@ class StockDetail(db.Model):
 class Setting(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     one_week_threshold = db.Column(db.Float)
-    one_week_greater = db.Column(db.Boolean)
     one_month_threshold = db.Column(db.Float)
-    one_month_greater = db.Column(db.Boolean)
     three_month_threshold = db.Column(db.Float)
-    three_month_greater = db.Column(db.Boolean)
     quarterly_growth_threshold = db.Column(db.Float)
-    quarterly_growth_greater = db.Column(db.Boolean)
     float_threshold = db.Column(db.Float)
-    float_greater = db.Column(db.Boolean)
 
     def __init__(self):
        pass

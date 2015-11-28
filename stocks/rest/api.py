@@ -98,12 +98,18 @@ class IndexesResource(Resource):
 class SettingsResource(Resource):
     def __init__(self):
         self.reqparse = reqparse.RequestParser()
-        self.reqparse.add_argument('name', type=str, required=True, location='json',
+        
+        self.reqparse.add_argument('one_week_threshold', type=str, required=True, location='json',
                                    help='Need a display name for the setting')
-        self.reqparse.add_argument('key', type=str, required=True, location='json',
+        self.reqparse.add_argument('one_month_threshold', type=str, required=True, location='json',
                                    help='Need a display name for the setting')
-        self.reqparse.add_argument('value', type=str, required=True, location='json',
+        self.reqparse.add_argument('three_month_threshold', type=str, required=True, location='json',
                                    help='Need a display name for the setting')
+        self.reqparse.add_argument('quarterly_growth_threshold', type=str, required=True, location='json',
+                                   help='Need a display name for the setting')
+        self.reqparse.add_argument('float_threshold', type=str, required=True, location='json',
+                                    help='Need a display name for the setting')                                                                      
+                                   
         super(SettingsResource, self).__init__()
 
     def get(self):
@@ -111,8 +117,16 @@ class SettingsResource(Resource):
 
     def post(self):
         args = self.reqparse.parse_args()
-
-
+        
+        setting = Setting.query.all()[0]
+        setting.one_week_threshold = args['one_week_threshold']
+        setting.one_month_threshold = args['one_month_threshold']
+        setting.three_month_threshold = args['three_month_threshold']
+        setting.quarterly_growth_threshold = args['quarterly_growth_threshold']
+        setting.float_threshold = args['float_threshold']
+        
+        db.session.commit()
+       
 class EmailResource(Resource):
     def __init__(self):
         self.reqparse = reqparse.RequestParser()

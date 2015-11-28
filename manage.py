@@ -5,7 +5,15 @@ from stocks.models.models import *
 
 def create_db():
     db.create_all()
-
+    setting = Setting()
+    setting.one_week_threshold = 10.0
+    setting.one_month_threshold = 15.0
+    setting.three_month_threshold = 25.0
+    setting.quarterly_growth_threshold = 25.0
+    setting.float_threshold = 300000000
+    
+    db.session.add(setting)
+    db.session.commit()
 
 def drop_db():
     db.drop_all()

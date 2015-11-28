@@ -12,6 +12,7 @@ api.add_resource(stock_api.FilteredStockReportResource, '/api/stocks/filtered_re
 api.add_resource(stock_api.RealTimeStockResource, '/api/stocks/<string:symbol>/realtime')
 api.add_resource(stock_api.HistoricalStockResource, '/api/stocks/<string:symbol>/history')
 api.add_resource(stock_api.IndexesResource, '/api/stocks/indexes')
+api.add_resource(stock_api.SettingsResource, '/api/settings')
 api.add_resource(stock_api.EmailResource, '/api/emails')
 api.add_resource(stock_api.DeleteEmailResource, '/api/emails/<string:email>/delete')
 
