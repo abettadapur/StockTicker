@@ -47,14 +47,15 @@ class StockReport(db.Model):
     
     @staticmethod   
     def get_filtered_reports():
+        setting = Setting.query.all()[0]
         max_date = db.session.query(db.func.max(StockReport.timestamp)).scalar()
         return StockReport.query \
         .filter(StockReport.stock_float is not None) \
-        .filter(StockReport.stock_float < 300000000) \
-        .filter(StockReport.quarterly_growth > 25.0) \
-        .filter(StockReport.one_week > 10.0) \
-        .filter(StockReport.one_month > 15.0) \
-        .filter(StockReport.three_month > 25.0) \
+        .filter(StockReport.stock_float < setting.float_threshold) \
+        .filter(StockReport.quarterly_growth > setting.quarterly_growth) \
+        .filter(StockReport.one_week > setting.one_week_threshold) \
+        .filter(StockReport.one_month > setting.one_month_threshold) \
+        .filter(StockReport.three_month > setting.three_month_threshold) \
         .filter(StockReport.timestamp == max_date) \
         .all()
 

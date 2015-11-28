@@ -36,18 +36,23 @@ class FilteredStockReportResource(Resource):
 
     def get(self):
         args = self.reqparse.parse_args()
-        stock_float = args['float'] if args['float'] is not None else 300000000
-        yoy_growth = args['yoy_growth'] if args['yoy_growth'] is not None else 25.0
-        onew_growth = args['onew_growth'] if args['onew_growth'] is not None else 10.0
-        onem_growth = args['onem_growth'] if args['onem_growth'] is not None else 15.0
-        threem_growth = args['threem_growth'] if args['threem_growth'] is not None else 25.0
+        setting = Setting.query.all()[0]
+        stock_float = args['float'] if args['float'] is not None else setting.float_threshold
+        yoy_growth = args['yoy_growth'] if args['yoy_growth'] is not None else setting.quarterly_growth_threshold
+        onew_growth = args['onew_growth'] if args['onew_growth'] is not None else setting.one_week_threshold
+        onem_growth = args['onem_growth'] if args['onem_growth'] is not None else setting.one_month_threshold
+        threem_growth = args['threem_growth'] if args['threem_growth'] is not None else setting.three_month_threshold
 
-        filtered_stocks = StockReport.query.filter(StockReport.stock_float is not None).filter(
-            StockReport.stock_float < stock_float).filter(StockReport.quarterly_growth > yoy_growth).filter(
-            StockReport.one_week > onew_growth).filter(StockReport.one_month > onem_growth).filter(
-            StockReport.three_month > threem_growth).filter(
-            StockReport.timestamp > datetime.datetime.utcnow() - datetime.timedelta(days=2))
-        print [c.as_dict() for c in filtered_stocks]
+        max_date = db.session.query(db.func.max(StockReport.timestamp)).scalar()
+        filtered_stocks =  StockReport.query \
+        .filter(StockReport.stock_float is not None) \
+        .filter(StockReport.stock_float < stock_float) \
+        .filter(StockReport.quarterly_growth > yoy_growth) \
+        .filter(StockReport.one_week > onew_growth) \
+        .filter(StockReport.one_month > onem_growth) \
+        .filter(StockReport.three_month > threem_growth) \
+        .filter(StockReport.timestamp == max_date) \
+        .all()
         return [c.as_dict() for c in filtered_stocks]
 
 class RealTimeStockResource(Resource):
