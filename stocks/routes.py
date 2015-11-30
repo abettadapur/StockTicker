@@ -14,7 +14,7 @@ api.add_resource(stock_api.HistoricalStockResource, '/api/stocks/<string:symbol>
 api.add_resource(stock_api.IndexesResource, '/api/stocks/indexes')
 api.add_resource(stock_api.SettingsResource, '/api/settings')
 api.add_resource(stock_api.EmailResource, '/api/emails')
-api.add_resource(stock_api.DeleteEmailResource, '/api/emails/<string:email>/delete')
+api.add_resource(stock_api.DeleteEmailResource, '/api/emails/<string:email>')
 
 
 @app.route('/')

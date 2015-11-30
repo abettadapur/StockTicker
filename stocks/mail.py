@@ -1,6 +1,6 @@
 ﻿import requests
 import datetime
-from stocks.models.models import Stock, StockReport
+from stocks.models.models import Stock, StockReport, Email
 from etc import config, util
 from jinja2 import Environment, PackageLoader
 
@@ -50,14 +50,14 @@ def send_mail(stock_reports):
 	
 	
 	htmlcode = mailtemplate.render(stocks=formatted_reports)
-	print htmlcode
+	emails = Email.query.all()
 	try:
 		requests.post(
 			"https://api.mailgun.net/v3/bettadapur.com/messages",
 			auth=("api", config.MAILGUN_KEY),
 			data={
 				"from": "{0} <{1}@bettadapur.com>".format(config.FROM_NAME, config.FROM_ADDR),
-				"to": ["alexbettadapur@gmail.com"],
+				"to": [e.email in emails],
 				"subject": config.SUBJECT.format(date = datetime.date.today()),
 				"text": "",
 				"html": htmlcode

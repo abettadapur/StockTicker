@@ -84,43 +84,94 @@ function ChartController($scope, $route, StockReport)
     };
 }
 
-function SettingsController($scope) {
+function SettingsController($scope, Settings) {
     //get emails from backend
+    
     //get current attribute values from backend
-    var user_settings = {};
     $scope.userSettings = {};
+    $scope.alertSuccess = false;
+    $scope.alertFail = false;
+    $scope.alertEmailFail = false;
+    
     //Get current values from backend:
+    Settings.GetSettings({}, function(results){
+        console.log(results);
+        $scope.userSettings.floatValue = results['float_threshold'];
+        $scope.userSettings.revenueGrowth = results['quarterly_growth_threshold'];
+        $scope.userSettings.oneWeek = results['one_week_threshold'];
+        $scope.userSettings.oneMonth = results['one_month_threshold'];
+        $scope.userSettings.threeMonth = results['three_month_threshold'];
+    },
+    function(error){
+        
+    });
     //Temp default values:
-    $scope.userSettings.floatValue = 300000000;
-    $scope.userSettings.revenueGrowth = 25;
-    $scope.userSettings.oneWeek = 10;
-    $scope.userSettings.oneMonth = 15;
-    $scope.userSettings.threeMonth = 25;
-    $scope.userSettings.emailList = [];
-    $scope.submit = function(UserSettingsForm) {
-
-        if ($scope.email) {
-            $scope.userSettings.emailList.push($scope.email);
-        }
-        user_settings = {
-            params : {
-                'email' : $scope.userSettings.emailList,
-                'floatValue' : $scope.userSettings.floatValue,
-                'revenueGrowth' : $scope.userSettings.revenueGrowth,
-                'oneWeek' : $scope.userSettings.oneWeek,
-                'oneMonth' : $scope.userSettings.oneMonth,
-                'threeMonth' : $scope.userSettings.threeMonth
-            }
-        };
-        $scope.UserSettingsForm.email.$setPristine();
-        $scope.UserSettingsForm.email.$setPristine(true);
-        $scope.email = '';
-        console.log(user_settings);
+   
+    $scope.emailList = Settings.GetEmails();
+    
+    $scope.submitThresholds = function(ThresholdsForm) {        
+        Settings.SaveSettings({
+            "float_threshold": $scope.userSettings.floatValue,
+            "quarterly_growth_threshold": $scope.userSettings.revenueGrowth,
+            "one_week_threshold": $scope.userSettings.oneWeek,
+            "one_month_threshold": $scope.userSettings.oneMonth,
+            "three_month_threshold": $scope.userSettings.threeMonth
+        }, function(success){
+            $scope.alertFail = false;
+            $scope.alertEmailFail = false;
+            $scope.alertSuccess = true;
+        }, function(error)
+        {
+            $scope.alertFail = true;
+            $scope.alertEmailFail = false;
+            $scope.alertSuccess = false;
+        }) 
+        console.log($scope.userSettings);
     };
+    
+    $scope.submitEmail = function(EmailsForm) {
+        if ($scope.email) {
+            Settings.CreateEmail({"email": $scope.email}, 
+            function(successResult)
+            {
+                $scope.emailList = Settings.GetEmails(); //log
+            },
+            function(errorResult)
+            {
+                $scope.alertFail = false;
+                $scope.alertEmailFail = true;
+                $scope.alertSuccess = false;
+            });
+        }
+        
+        $scope.email = '';
+    }
+    
     $scope.deleteEmail = function(email) {
-        var index_email = $scope.userSettings.emailList.indexOf(email);
-        $scope.userSettings.emailList.splice(index_email, 1);
-        //Delete email from backend
+        Settings.DeleteEmail({email: email}, 
+            function(successResult)
+            {
+                $scope.emailList = Settings.GetEmails(); //log
+            },
+            function(errorResult)
+            {
+                $scope.alertFail = false;
+                $scope.alertEmailFail = true;
+                $scope.alertSuccess = false;
+            }
+        );
+    }
+    
+    $scope.getShortNumber = function(number)
+    {
+        if(number < 1000)
+            return String(number);
+        else if(number < 1000000)
+            return String(number/1000)+'K';
+        else if(number < 1000000000)
+            return String(number/1000000) + 'M';
+        else 
+            return String(number/1000000000) + 'B';
     }
 }
 

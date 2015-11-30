@@ -55,3 +55,29 @@ stockApp.factory('StockReport', function ($resource) {
         }
     });
 });
+stockApp.factory('Settings', function($resource)
+{
+   return $resource('/api', {}, {
+        GetEmails: {
+            method: 'GET',
+            url: '/api/emails',
+            isArray: true
+        },
+        CreateEmail: {
+            method: 'POST',
+            url: '/api/emails'
+        },
+        DeleteEmail: {
+            method: 'DELETE',
+            url: '/api/emails/:email'
+        },
+        GetSettings: {
+            method: 'GET',
+            url:'/api/settings'
+        },
+        SaveSettings: {
+            method: 'POST',
+            url: '/api/settings'
+        }
+   }); 
+});
