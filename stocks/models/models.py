@@ -52,7 +52,7 @@ class StockReport(db.Model):
         return StockReport.query \
         .filter(StockReport.stock_float is not None) \
         .filter(StockReport.stock_float < setting.float_threshold) \
-        .filter(StockReport.quarterly_growth > setting.quarterly_growth) \
+        .filter(StockReport.quarterly_growth > setting.quarterly_growth_threshold) \
         .filter(StockReport.one_week > setting.one_week_threshold) \
         .filter(StockReport.one_month > setting.one_month_threshold) \
         .filter(StockReport.three_month > setting.three_month_threshold) \

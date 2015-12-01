@@ -50,7 +50,6 @@ def send_mail(stock_reports):
 	
 	
 	htmlcode = mailtemplate.render(stocks=formatted_reports)
-	print htmlcode
 	try:
 		requests.post(
 			"https://api.mailgun.net/v3/bettadapur.com/messages",
