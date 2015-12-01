@@ -1,5 +1,5 @@
 'use strict';
-var stockApp = angular.module('StockTrackerApp', ['stockServices', 'ngRoute', 'ngStorage']);
+var stockApp = angular.module('StockTrackerApp', ['stockServices', 'ngRoute', 'ngStorage', 'angularUtils.directives.dirPagination']);
 
 stockApp.config(function ($routeProvider, $locationProvider) {
     $routeProvider.when('/', {
@@ -18,5 +18,8 @@ stockApp.config(function ($routeProvider, $locationProvider) {
             activetab: 'settings'
         });
     //add more routes here
+});
+stockApp.config(function(paginationTemplateProvider) {
+    paginationTemplateProvider.setPath('static/pages/paginate.html');
 });
 

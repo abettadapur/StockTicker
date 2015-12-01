@@ -72,7 +72,7 @@
                                 </th>
                             </thead>
                             <tbody>
-                                <tr ng-repeat="stock in filteredlist | orderBy:sortKey:reverse">
+                                <tr dir-paginate="stock in filteredlist|orderBy:sortKey:reverse|itemsPerPage:5">
                                     <td>{{ stock.stock.symbol}}</td>
                                     <td>${{ stock.closing_price|number:2 }}</td>
                                     <td>{{ getShortNumber(stock.stock_float) }}</td>
@@ -83,6 +83,7 @@
                                 </tr>
                             </tbody>
                         </table>
+                        <dir-pagination-controls></dir-pagination-controls>
                        <h4 class="text-muted" ng-if="filteredlist.length == 0">
                            No stocks matched your parameters today. Change your parameters in the settings menu
                        </h4>
