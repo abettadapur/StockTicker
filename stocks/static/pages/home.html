@@ -41,24 +41,47 @@
                     </div>
                     <div class="panel-body">
                        <table style="padding-top:10px;" class="table table-striped table-bordered table-condensed">
-                            <tr>
-                                <th>Stock</th>
-                                <th>Close</th>
-                                <th>Float</th>
-                                <th>1W Growth</th>
-                                <th>1M Growth</th>
-                                <th>3M Growth</th>
-                                <th>Quarterly Growth</th>
-                            </tr>
-                            <tr ng-repeat="stock in filteredlist">
-                                <td>{{ stock.stock.symbol}}</td>
-                                <td>${{ stock.closing_price|number:2 }}</td>
-                                <td>{{ getShortNumber(stock.stock_float) }}</td>
-                                <td>{{ stock.one_week }}%</td>
-                                <td>{{ stock.one_month }}%</td>
-                                <td>{{ stock.three_month }}%</td>
-                                <td>{{ stock.quarterly_growth }}%</td>
-                            </tr>
+                            <thead>
+                                <th>
+                                    <a ng-click="sort('stock.symbol')" href="javascript:void(0);">Stock</a>
+                                    <span class="glyphicon sort-icon" ng-show="sortKey=='stock.symbol'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                                </th>
+                                <th>
+                                    <a ng-click="sort('closing_price')" href="javascript:void(0);">Close</a>
+                                    <span class="glyphicon sort-icon" ng-show="sortKey=='closing_price'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                                </th>
+                                <th>
+                                    <a ng-click="sort('stock_float')" href="javascript:void(0);">Float</a>
+                                    <span class="glyphicon sort-icon" ng-show="sortKey=='stock_float'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                                </th>
+                                <th>
+                                    <a ng-click="sort('one_week')" href="javascript:void(0);">1W Growth</a>
+                                    <span class="glyphicon sort-icon" ng-show="sortKey=='one_week'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                                </th>
+                                <th>
+                                    <a ng-click="sort('one_month')" href="javascript:void(0);">1M Growth</a>
+                                    <span class="glyphicon sort-icon" ng-show="sortKey=='one_month'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                                </th>
+                                <th>
+                                    <a ng-click="sort('three_month')" href="javascript:void(0);">3M Growth</a>
+                                    <span class="glyphicon sort-icon" ng-show="sortKey=='three_month'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                                </th>
+                                <th>
+                                     <a ng-click="sort('quarterly_growth')" href="javascript:void(0);">Quarterly Growth</a>
+                                    <span class="glyphicon sort-icon" ng-show="sortKey=='quarterly_growth'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                                </th>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="stock in filteredlist | orderBy:sortKey:reverse">
+                                    <td>{{ stock.stock.symbol}}</td>
+                                    <td>${{ stock.closing_price|number:2 }}</td>
+                                    <td>{{ getShortNumber(stock.stock_float) }}</td>
+                                    <td>{{ stock.one_week }}%</td>
+                                    <td>{{ stock.one_month }}%</td>
+                                    <td>{{ stock.three_month }}%</td>
+                                    <td>{{ stock.quarterly_growth }}%</td>
+                                </tr>
+                            </tbody>
                         </table>
                        <h4 class="text-muted" ng-if="filteredlist.length == 0">
                            No stocks matched your parameters today. Change your parameters in the settings menu

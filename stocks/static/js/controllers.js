@@ -6,7 +6,10 @@ function HomeController ($scope, $route, $localStorage, StockReport)
     $scope.$storage =$localStorage.$default({
         watchlist: []
     });
-
+    
+    $scope.sortKey = 'stock.symbol';
+    $scope.reverse = false;
+    
     StockReport.GetFilteredReports({}, function(stocks){
         $scope.filteredlist = stocks;
     });
@@ -32,6 +35,11 @@ function HomeController ($scope, $route, $localStorage, StockReport)
             return String(number/1000000) + 'M';
         else 
             return String(number/1000000000) + 'B';
+    }
+    
+    $scope.sort = function(keyname){
+        $scope.sortKey = keyname;
+        $scope.reverse = !$scope.reverse;
     }
 }
 
