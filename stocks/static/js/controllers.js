@@ -3,12 +3,15 @@ function HomeController ($scope, $route, $localStorage, StockReport)
     $scope.$route = $route;
     $scope.marketlist = [];
     $scope.filteredlist = [];
-    $scope.$storage =$localStorage.$default({
+    $scope.storage =$localStorage.$default({
         watchlist: []
     });
     
     $scope.sortKey = 'stock.symbol';
     $scope.reverse = false;
+    
+    $scope.wlsortKey = 'stock.symbol';
+    $scope.wlreverse = false;
     
     StockReport.GetFilteredReports({}, function(stocks){
         $scope.filteredlist = stocks;
@@ -19,6 +22,13 @@ function HomeController ($scope, $route, $localStorage, StockReport)
     });
 
     $scope.addToWatchList = function(symbol) {
+        $("#watchlistsymbol").val('');
+        for (var i = 0; i < $scope.storage.watchlist.length; ++i) {
+            if($scope.storage.watchlist[i].stock.symbol == symbol)
+            {
+                return;
+            }
+        }
         var single_stock = StockReport.GetRealtime({ stock:symbol.toUpperCase()});
         if (single_stock) {
             $localStorage.watchlist.push(single_stock);
@@ -40,6 +50,20 @@ function HomeController ($scope, $route, $localStorage, StockReport)
     $scope.sort = function(keyname){
         $scope.sortKey = keyname;
         $scope.reverse = !$scope.reverse;
+    }
+    
+    $scope.watchlistsort = function(keyname){
+        $scope.wlsortKey = keyname;
+        $scope.wlreverse = !$scope.wlreverse;
+    }
+    
+    $scope.watchListRemove = function(symbol)
+    {
+        for (var i = 0; i < $scope.storage.watchlist.length; ++i) {
+            if ($scope.storage.watchlist[i].stock.symbol === symbol) {
+                $scope.storage.watchlist.splice(i--, 1);
+            }
+        }
     }
 }
 

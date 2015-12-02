@@ -10,29 +10,103 @@
 
         <div class="row">
             <div class="col-lg-6">
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        <h3 class="panel-title"><i class="fa fa-info-circle"></i>  Market Indexes</h3>
-                    </div>
-                    <div class="panel-body">
-                       <div class="list-group">
-                           <table style="padding-top:10px;" class="table table-bordered table-condensed">
-                            <tr>
-                                <th>Index</th>
-                                <th>Last Trade</th>
-                                <th>Percent Change</th>
-                                <th>Price Change</th>
-                            </tr>
-                            <tr ng-repeat="stock in marketlist" ng-class='{"success": stock.positive, "danger": !stock.positive}'>
-                                <td>{{ stock.name}}</td>
-                                <td>${{ stock.price }}</td>
-                                <td>{{ stock.percentage_change }}</td>
-                                <td>{{ stock.price_change }}</td>
-                            </tr>
-                        </table>
-                       </div>
+                <div class="row">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><i class="fa fa-info-circle"></i>  Market Indexes</h3>
+                        </div>
+                        <div class="panel-body">
+                        <div class="list-group">
+                            <table style="padding-top:10px;" class="table table-bordered table-condensed">
+                                <tr>
+                                    <th>Index</th>
+                                    <th>Last Trade</th>
+                                    <th>Percent Change</th>
+                                    <th>Price Change</th>
+                                </tr>
+                                <tr ng-repeat="stock in marketlist" ng-class='{"success": stock.positive, "danger": !stock.positive}'>
+                                    <td>{{ stock.name}}</td>
+                                    <td>${{ stock.price }}</td>
+                                    <td>{{ stock.percentage_change }}</td>
+                                    <td>{{ stock.price_change }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><i class="fa fa-info-circle"></i>  Watchlist</h3>
+                        </div>
+                        <div class="panel-body">
+                            <form novalidate class="form-inline" style="padding-bottom: 10px;">
+                                <div class="form-group">
+                                    <input id="watchlistsymbol" type="text" class="form-control" ng-model="symbol" placeholder="Symbol (ex: AAPL)" />
+                                    <button type="submit" class="btn btn-primary" ng-click="addToWatchList(symbol)">ADD</button>
+                                </div>
+                            </form>
+                            <table style="padding-top:10px;" class="table table-bordered table-condensed">
+                                <thead>
+                                <tr>
+                                    <th>
+                                        <a ng-click="watchlistsort('stock.symbol')" href="javascript:void(0);">Stock</a>
+                                        <span class="glyphicon sort-icon" ng-show="wlsortKey=='stock.symbol'" ng-class="{'glyphicon-chevron-up':wlreverse,'glyphicon-chevron-down':!wlreverse}"></span>
+                                    </th>
+                                    <th>
+                                        <a ng-click="watchlistsort('price')" href="javascript:void(0);">Last Trade</a>
+                                        <span class="glyphicon sort-icon" ng-show="wlsortKey=='price'" ng-class="{'glyphicon-chevron-up':wlreverse,'glyphicon-chevron-down':!wlreverse}"></span>
+                                    </th>
+                                    <th>
+                                        <a ng-click="watchlistsort('volume')" href="javascript:void(0);">Volume</a>
+                                        <span class="glyphicon sort-icon" ng-show="wlsortKey=='volume'" ng-class="{'glyphicon-chevron-up':wlreverse,'glyphicon-chevron-down':!wlreverse}"></span>
+                                    </th>
+                                    <th>
+                                        <a ng-click="watchlistsort('open')" href="javascript:void(0);">Open</a>
+                                        <span class="glyphicon sort-icon" ng-show="wlsortKey=='open'" ng-class="{'glyphicon-chevron-up':wlreverse,'glyphicon-chevron-down':!wlreverse}"></span>
+                                    </th>
+                                    <th>
+                                        <a ng-click="watchlistsort('days_low')" href="javascript:void(0);">Day Low</a>
+                                        <span class="glyphicon sort-icon" ng-show="wlsortKey=='days_low'" ng-class="{'glyphicon-chevron-up':wlreverse,'glyphicon-chevron-down':!wlreverse}"></span>
+                                    </th>
+                                    <th>
+                                        <a ng-click="watchlistsort('days_high')" href="javascript:void(0);">Day High</a>
+                                        <span class="glyphicon sort-icon" ng-show="wlsortKey=='days_high'" ng-class="{'glyphicon-chevron-up':wlreverse,'glyphicon-chevron-down':!wlreverse}"></span>
+                                    </th>
+                                    <th>
+                                        <a ng-click="watchlistsort('year_low')" href="javascript:void(0);">Year Low</a>
+                                        <span class="glyphicon sort-icon" ng-show="wlsortKey=='year_low'" ng-class="{'glyphicon-chevron-up':wlreverse,'glyphicon-chevron-down':!wlreverse}"></span>
+                                    </th>
+                                    <th>
+                                        <a ng-click="watchlistsort('year_high')" href="javascript:void(0);">Year High</a>
+                                        <span class="glyphicon sort-icon" ng-show="wlsortKey=='year_high'" ng-class="{'glyphicon-chevron-up':wlreverse,'glyphicon-chevron-down':!wlreverse}"></span>
+                                    </th>
+                                    <th>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="stock in storage.watchlist | orderBy:wlsortKey:wlreverse " ng-class='{"success": stock.positive, "danger": !stock.positive}' pagination-id="watchlistpage">
+                                    <td>{{ stock.stock.symbol }}</td>
+                                    <td>{{ stock.price }}</td>
+                                    <td>{{ stock.volume }}</td>
+                                    <td>{{ stock.open }}</td>
+                                    <td>{{ stock.days_low }}</td>
+                                    <td>{{ stock.days_high }}</td>
+                                    <td>{{ stock.year_low }}</td>
+                                    <td>{{ stock.year_high }}</td>
+                                    <td><a ng-click="watchListRemove(stock.stock.symbol)" href="javascript:void(0);"><i class="glyphicon glyphicon-remove" style="color: #FF0000; display:block; margin: 0 auto;"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <dir-pagination-controls pagination-id="watchlistpage"></dir-pagination-controls>
+                            <h4 class="text-muted" ng-if="$storage.watchlist.length == 0">
+                                Add some stocks to your watchlist!
+                            </h4>
+                        </div>
+                    </div>
+                </div>  
             </div>
             <div class="col-lg-6">
                 <div class="panel panel-primary">
@@ -72,7 +146,7 @@
                                 </th>
                             </thead>
                             <tbody>
-                                <tr dir-paginate="stock in filteredlist|orderBy:sortKey:reverse|itemsPerPage:5">
+                                <tr dir-paginate="stock in filteredlist|orderBy:sortKey:reverse|itemsPerPage:5" pagination-id="toppage">
                                     <td>{{ stock.stock.symbol}}</td>
                                     <td>${{ stock.closing_price|number:2 }}</td>
                                     <td>{{ getShortNumber(stock.stock_float) }}</td>
@@ -83,60 +157,10 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <dir-pagination-controls></dir-pagination-controls>
+                        <dir-pagination-controls pagination-id="toppage"></dir-pagination-controls>
                        <h4 class="text-muted" ng-if="filteredlist.length == 0">
                            No stocks matched your parameters today. Change your parameters in the settings menu
                        </h4>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-             <div class="col-lg-6">
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        <h3 class="panel-title"><i class="fa fa-info-circle"></i>  Watchlist</h3>
-                    </div>
-                    <div class="panel-body">
-                        <form novalidate class="form-inline" style="padding-bottom: 10px;">
-                            <div class="form-group">
-                                <input type="text" class="form-control" ng-model="symbol" placeholder="Symbol (ex: AAPL)" />
-                                <button type="submit" class="btn btn-primary" ng-click="addToWatchList(symbol)">ADD</button>
-                            </div>
-                        </form>
-                        <table style="padding-top:10px;" class="table table-bordered table-condensed">
-                            <tr>
-                                <th>Stock</th>
-                                <th>Last Trade</th>
-                                <th>Volume</th>
-                                <th>Open</th>
-                                <th>Day Low</th>
-                                <th>Day High</th>
-                                <th>Year Low</th>
-                                <th>Year High</th>
-                            </tr>
-                            <tr ng-repeat="stock in $storage.watchlist" ng-class='{"success": stock.positive, "danger": !stock.positive}'>
-                                <td>{{ stock.stock.symbol }}</td>
-                                <td>{{ stock.price }}</td>
-                                <td>{{ stock.volume }}</td>
-                                <td>{{ stock.open }}</td>
-                                <td>{{ stock.days_low }}</td>
-                                <td>{{ stock.days_high }}</td>
-                                <td>{{ stock.year_low }}</td>
-                                <td>{{ stock.year_high }}</td>
-                            </tr>
-                        </table>
-
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        <h3 class="panel-title"><i class="fa fa-info-circle"></i>  A fourth panel</h3>
-                    </div>
-                    <div class="panel-body">
-                       
                     </div>
                 </div>
             </div>
