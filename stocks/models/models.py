@@ -49,7 +49,7 @@ class StockReport(db.Model):
     def get_filtered_reports():
         setting = Setting.query.all()[0]
         max_date = db.session.query(db.func.max(StockReport.timestamp)).scalar()
-        return StockReport.query \
+        stocks = StockReport.query \
         .filter(StockReport.stock_float is not None) \
         .filter(StockReport.stock_float < setting.float_threshold) \
         .filter(StockReport.quarterly_growth > setting.quarterly_growth_threshold) \
@@ -58,6 +58,12 @@ class StockReport(db.Model):
         .filter(StockReport.three_month > setting.three_month_threshold) \
         .filter(StockReport.timestamp == max_date) \
         .all()
+        
+        stocks_dict = {}
+        for stock in stocks:
+            if stock.stock.symbol not in stocks_dict:
+                stocks_dict[stock.stock.symbol] = stock
+        return stocks_dict.values()
 
 class StockDetail(db.Model):
     id = db.Column(db.Integer, primary_key=True)

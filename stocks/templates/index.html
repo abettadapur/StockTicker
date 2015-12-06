@@ -24,12 +24,6 @@
                       <a class="navbar-brand" href="#">StockTracker</a>
                   </div>
 
-                  <ul class="nav navbar-right top-nav">
-                      <li>
-                          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-gear"></i> </a>
-                      </li>
-                  </ul>
-                  
               <div class="collapse navbar-collapse navbar-ex1-collapse">
                   <ul class="nav navbar-nav side-nav">
                       <li ng-class="{active: $route.current.activetab == 'dashboard'}">
@@ -39,18 +33,7 @@
                           <a href="#charts"><i class="fa fa-fw fa-bar-chart-o"></i> Charts</a>
                       </li>
                       <li ng-class="{active: $route.current.activetab == 'settings'}">
-                          <a href="#settings"><i class="fa fa-fw fa-bar-chart-o"></i> Settings</a>
-                      </li>
-                      <li>
-                          <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-arrows-v"></i> Dropdown <i class="fa fa-fw fa-caret-down"></i></a>
-                          <ul id="demo" class="collapse">
-                              <li>
-                                  <a href="#">Dropdown Item</a>
-                              </li>
-                              <li>
-                                  <a href="#">Dropdown Item</a>
-                              </li>
-                          </ul>
+                          <a href="#settings"><i class="fa fa-fw fa-gear"></i> Settings</a>
                       </li>
                   </ul>
                   </div>
@@ -71,12 +54,11 @@
       <script src="/static/lib/morris/raphael.min.js"></script>
       <script src="/static/lib/moment/moment.js"></script>
       <script src="/static/lib/bootstrap/bootstrap-datepicker.js"></script>
-      <script src="/static/lib/angular/ngstorage.js"></script>
+      <script src="/static/lib/angular/ngStorage.js"></script>
       <script src="/static/lib/angular/angular-table.js"></script>
       <script src="/static/lib/angular/dirPaginate.js"></script>
       <script type="text/javascript" src="/static/js/resources.js"></script>
       <script type="text/javascript" src="/static/js/controllers.js"></script>
       <script type="text/javascript" src="/static/js/app.js"></script>
-      <script src="https://rawgithub.com/gsklee/ngStorage/master/ngStorage.js"></script>
   </body>
 </html>

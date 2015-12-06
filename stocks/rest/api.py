@@ -53,7 +53,12 @@ class FilteredStockReportResource(Resource):
         .filter(StockReport.three_month > threem_growth) \
         .filter(StockReport.timestamp == max_date) \
         .all()
-        return [c.as_dict() for c in filtered_stocks]
+        
+        stocks_dict = {}
+        for stock in filtered_stocks:
+            if stock.stock.symbol not in stocks_dict:
+                stocks_dict[stock.stock.symbol] = stock
+        return [c.as_dict() for c in stocks_dict.values()]
 
 class RealTimeStockResource(Resource):
     def get(self, symbol):

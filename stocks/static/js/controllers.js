@@ -40,11 +40,11 @@ function HomeController ($scope, $route, $localStorage, StockReport)
         if(number < 1000)
             return String(number);
         else if(number < 1000000)
-            return String(number/1000)+'K';
+            return String((number/1000).toFixed(2))+'K';
         else if(number < 1000000000)
-            return String(number/1000000) + 'M';
+            return String((number/1000000).toFixed(2)) + 'M';
         else 
-            return String(number/1000000000) + 'B';
+            return String((number/1000000000).toFixed(2)) + 'B';
     }
     
     $scope.sort = function(keyname){

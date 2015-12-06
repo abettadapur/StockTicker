@@ -52,35 +52,39 @@
                                 <tr>
                                     <th>
                                         <a ng-click="watchlistsort('stock.symbol')" href="javascript:void(0);">Stock</a>
-                                        <span class="glyphicon sort-icon" ng-show="wlsortKey=='stock.symbol'" ng-class="{'glyphicon-chevron-up':wlreverse,'glyphicon-chevron-down':!wlreverse}"></span>
+                                        <span class="fa" ng-show="wlsortKey=='stock.symbol'" ng-class="{'fa-sort-asc':wlreverse,'fa-sort-desc':!wlreverse}"></span>
+                                    </th>
+                                     <th>
+                                        <a ng-click="watchlistsort('percent_change')" href="javascript:void(0);">Change</a>
+                                        <span class="fa" ng-show="wlsortKey=='percent_change'" ng-class="{'fa-sort-asc':wlreverse,'fa-sort-desc':!wlreverse}"></span>
                                     </th>
                                     <th>
                                         <a ng-click="watchlistsort('price')" href="javascript:void(0);">Last Trade</a>
-                                        <span class="glyphicon sort-icon" ng-show="wlsortKey=='price'" ng-class="{'glyphicon-chevron-up':wlreverse,'glyphicon-chevron-down':!wlreverse}"></span>
+                                        <span class="fa" ng-show="wlsortKey=='price'" ng-class="{'fa-sort-asc':wlreverse,'fa-sort-desc':!wlreverse}"></span>
                                     </th>
                                     <th>
                                         <a ng-click="watchlistsort('volume')" href="javascript:void(0);">Volume</a>
-                                        <span class="glyphicon sort-icon" ng-show="wlsortKey=='volume'" ng-class="{'glyphicon-chevron-up':wlreverse,'glyphicon-chevron-down':!wlreverse}"></span>
+                                        <span class="fa" ng-show="wlsortKey=='volume'" ng-class="{'fa-sort-asc':wlreverse,'fa-sort-desc':!wlreverse}"></span>
                                     </th>
                                     <th>
                                         <a ng-click="watchlistsort('open')" href="javascript:void(0);">Open</a>
-                                        <span class="glyphicon sort-icon" ng-show="wlsortKey=='open'" ng-class="{'glyphicon-chevron-up':wlreverse,'glyphicon-chevron-down':!wlreverse}"></span>
+                                        <span class="fa" ng-show="wlsortKey=='open'" ng-class="{'fa-sort-asc':wlreverse,'fa-sort-desc':!wlreverse}"></span>
                                     </th>
                                     <th>
                                         <a ng-click="watchlistsort('days_low')" href="javascript:void(0);">Day Low</a>
-                                        <span class="glyphicon sort-icon" ng-show="wlsortKey=='days_low'" ng-class="{'glyphicon-chevron-up':wlreverse,'glyphicon-chevron-down':!wlreverse}"></span>
+                                        <span class="fa" ng-show="wlsortKey=='days_low'" ng-class="{'fa-sort-asc':wlreverse,'fa-sort-desc':!wlreverse}"></span>
                                     </th>
                                     <th>
                                         <a ng-click="watchlistsort('days_high')" href="javascript:void(0);">Day High</a>
-                                        <span class="glyphicon sort-icon" ng-show="wlsortKey=='days_high'" ng-class="{'glyphicon-chevron-up':wlreverse,'glyphicon-chevron-down':!wlreverse}"></span>
+                                        <span class="fa" ng-show="wlsortKey=='days_high'" ng-class="{'fa-sort-asc':wlreverse,'fa-sort-desc':!wlreverse}"></span>
                                     </th>
                                     <th>
                                         <a ng-click="watchlistsort('year_low')" href="javascript:void(0);">Year Low</a>
-                                        <span class="glyphicon sort-icon" ng-show="wlsortKey=='year_low'" ng-class="{'glyphicon-chevron-up':wlreverse,'glyphicon-chevron-down':!wlreverse}"></span>
+                                        <span class="fa" ng-show="wlsortKey=='year_low'" ng-class="{'fa-sort-asc':wlreverse,'fa-sort-desc':!wlreverse}"></span>
                                     </th>
                                     <th>
                                         <a ng-click="watchlistsort('year_high')" href="javascript:void(0);">Year High</a>
-                                        <span class="glyphicon sort-icon" ng-show="wlsortKey=='year_high'" ng-class="{'glyphicon-chevron-up':wlreverse,'glyphicon-chevron-down':!wlreverse}"></span>
+                                        <span class="fa" ng-show="wlsortKey=='year_high'" ng-class="{'fa-sort-asc':wlreverse,'fa-sort-desc':!wlreverse}"></span>
                                     </th>
                                     <th>
                                     </th>
@@ -89,13 +93,14 @@
                                 <tbody>
                                 <tr ng-repeat="stock in storage.watchlist | orderBy:wlsortKey:wlreverse " ng-class='{"success": stock.positive, "danger": !stock.positive}' pagination-id="watchlistpage">
                                     <td>{{ stock.stock.symbol }}</td>
-                                    <td>{{ stock.price }}</td>
-                                    <td>{{ stock.volume }}</td>
-                                    <td>{{ stock.open }}</td>
-                                    <td>{{ stock.days_low }}</td>
-                                    <td>{{ stock.days_high }}</td>
-                                    <td>{{ stock.year_low }}</td>
-                                    <td>{{ stock.year_high }}</td>
+                                    <td>{{stock.percent_change | number:2}}%</td>
+                                    <td>${{ stock.price }}</td>
+                                    <td>{{ getShortNumber(stock.volume)}}</td>
+                                    <td>${{ stock.open }}</td>
+                                    <td>${{ stock.days_low }}</td>
+                                    <td>${{ stock.days_high }}</td>
+                                    <td>${{ stock.year_low }}</td>
+                                    <td>${{ stock.year_high }}</td>
                                     <td><a ng-click="watchListRemove(stock.stock.symbol)" href="javascript:void(0);"><i class="glyphicon glyphicon-remove" style="color: #FF0000; display:block; margin: 0 auto;"></td>
                                 </tr>
                                 </tbody>
@@ -118,31 +123,31 @@
                             <thead>
                                 <th>
                                     <a ng-click="sort('stock.symbol')" href="javascript:void(0);">Stock</a>
-                                    <span class="glyphicon sort-icon" ng-show="sortKey=='stock.symbol'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                                    <span class="fa" ng-show="sortKey=='stock.symbol'" ng-class="{'fa-sort-asc':reverse,'fa-sort-desc':!reverse}"></span>
                                 </th>
                                 <th>
                                     <a ng-click="sort('closing_price')" href="javascript:void(0);">Close</a>
-                                    <span class="glyphicon sort-icon" ng-show="sortKey=='closing_price'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                                    <span class="fa" ng-show="sortKey=='closing_price'" ng-class="{'fa-sort-asc':reverse,'fa-sort-desc':!reverse}"></span>
                                 </th>
                                 <th>
                                     <a ng-click="sort('stock_float')" href="javascript:void(0);">Float</a>
-                                    <span class="glyphicon sort-icon" ng-show="sortKey=='stock_float'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                                    <span class="fa" ng-show="sortKey=='stock_float'" ng-class="{'fa-sort-asc':reverse,'fa-sort-desc':!reverse}"></span>
                                 </th>
                                 <th>
                                     <a ng-click="sort('one_week')" href="javascript:void(0);">1W Growth</a>
-                                    <span class="glyphicon sort-icon" ng-show="sortKey=='one_week'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                                    <span class="fa" ng-show="sortKey=='one_week'" ng-class="{'fa-sort-asc':reverse,'fa-sort-desc':!reverse}"></span>
                                 </th>
                                 <th>
                                     <a ng-click="sort('one_month')" href="javascript:void(0);">1M Growth</a>
-                                    <span class="glyphicon sort-icon" ng-show="sortKey=='one_month'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                                    <span class="fa" ng-show="sortKey=='one_month'" ng-class="{'fa-sort-asc':reverse,'fa-sort-desc':!reverse}"></span>
                                 </th>
                                 <th>
                                     <a ng-click="sort('three_month')" href="javascript:void(0);">3M Growth</a>
-                                    <span class="glyphicon sort-icon" ng-show="sortKey=='three_month'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                                    <span class="fa" ng-show="sortKey=='three_month'" ng-class="{'fa-sort-asc':reverse,'fa-sort-desc':!reverse}"></span>
                                 </th>
                                 <th>
                                      <a ng-click="sort('quarterly_growth')" href="javascript:void(0);">Quarterly Growth</a>
-                                    <span class="glyphicon sort-icon" ng-show="sortKey=='quarterly_growth'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                                    <span class="fa" ng-show="sortKey=='quarterly_growth'" ng-class="{'fa-sort-asc':reverse,'fa-sort-desc':!reverse}"></span>
                                 </th>
                             </thead>
                             <tbody>
